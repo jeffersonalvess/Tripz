@@ -4,4 +4,5 @@
     <string name="facebook_app_id">875749949211222</string>
     <string name="title_activity_welcome_screen">WelcomeScreen</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_test">Test</string>
 </resources>

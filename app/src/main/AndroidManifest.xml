@@ -10,9 +10,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
+            android:value="875749949211222" />
 
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -20,7 +21,8 @@
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <!--        <activity
+        <!--
+                    <activity
                     android:name=".MainActivity"
                     android:label="@string/app_name"
                     android:theme="@style/AppTheme.NoActionBar">
@@ -28,7 +30,8 @@
                         <action android:name="android.intent.action.MAIN" />
                         <category android:name="android.intent.category.LAUNCHER" />
                     </intent-filter>
-                </activity>-->
+                </activity>
+        -->
 
         <activity
             android:name=".WelcomeScreen"
@@ -36,8 +39,14 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".Test"
+            android:label="@string/title_activity_test"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 
