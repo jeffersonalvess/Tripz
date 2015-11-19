@@ -1,6 +1,7 @@
 package edu.depaul.csc472.tripz;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -35,20 +36,10 @@ import java.security.NoSuchAlgorithmException;
 
 public class WelcomeScreen extends AppCompatActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
+    private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+    public static final String FACEBOOK_PREFS = "FacebookPreferences";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +47,16 @@ public class WelcomeScreen extends AppCompatActivity {
         setContentView(R.layout.activity_welcome_screen);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
+
+        SharedPreferences settings = getSharedPreferences(FACEBOOK_PREFS, 0);
+
+        if (settings.getBoolean("loginSucessful", false)) {
+            Intent intent = new Intent();
+            intent.setClass(WelcomeScreen.this, Test.class);
+            startActivity(intent);
+            finish();
+        }
+
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -156,9 +157,14 @@ public class WelcomeScreen extends AppCompatActivity {
 
                 if (profile != null) {
                     //Do something with data obtained
-                    Intent intent = new Intent(PlaceholderFragment.this.getActivity(), MainActivity.class);
+                    Intent intent = new Intent(PlaceholderFragment.this.getActivity(), Test.class);
                     startActivity(intent);
                 }
+
+                SharedPreferences settings = getContext().getSharedPreferences(FACEBOOK_PREFS, 0); // 0 - for private mode
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putBoolean("loginSucessful", true);
+                editor.commit();
 
                 // System.out.println("Facebook Login Successful!");
                 // System.out.println("Logged in user Details : ");
@@ -232,14 +238,11 @@ public class WelcomeScreen extends AppCompatActivity {
         public void onActivityResult(int reqCode, int resCode, Intent i) {
             super.onActivityResult(reqCode, resCode, i);
             mCallBackManager.onActivityResult(reqCode, resCode, i);
-
-            // i = new Intent(getActivity(),MainActivity.class);
-            // getActivity().startActivity(i);
         }
 
         public void getFbKeyHash(String packageName) {
             try {
-                final PackageInfo info = getContext().getPackageManager().getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
+                PackageInfo info = getContext().getPackageManager().getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
                 for (Signature signature : info.signatures) {
                     MessageDigest md = MessageDigest.getInstance("SHA");
                     md.update(signature.toByteArray());
