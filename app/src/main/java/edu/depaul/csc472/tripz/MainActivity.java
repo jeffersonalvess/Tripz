@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void getFbKeyHash(String packageName) {
-
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     packageName,
