@@ -12,6 +12,7 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity {
 
     int i = 1;
+    String jeff = "Qual o criterio?";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
