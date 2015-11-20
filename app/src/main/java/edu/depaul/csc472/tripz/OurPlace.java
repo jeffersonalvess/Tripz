@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Created by Miller on 19/11/2015.
  */
-public class Place {
+public class OurPlace {
     // Esses atributos foram todos que eu consegui pensar agora as 3:18am...
     // Quem lembrar de mais algum atributo relevante, por favor, adicionar. :)
     private String name;

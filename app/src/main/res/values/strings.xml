@@ -96,4 +96,5 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_google_maps_test">GoogleMapsTest</string>
 </resources>
