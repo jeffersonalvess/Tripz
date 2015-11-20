@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -166,6 +167,8 @@ public class WelcomeScreen extends AppCompatActivity {
                 editor.commit();
 
                 Intent intent = new Intent(PlaceholderFragment.this.getActivity(), MainActivity.class);
+
+
                 startActivity(intent);
 
                 // System.out.println("Facebook Login Successful!");
