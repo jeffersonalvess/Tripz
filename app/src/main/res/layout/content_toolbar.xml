@@ -11,7 +11,7 @@
         android:src="@drawable/com_facebook_profile_picture_blank_square"
         android:id="@+id/imageView"
         android:layout_marginTop="7dp"
-        android:scaleType="centerCrop" />
+        android:scaleType="fitStart" />
 
 
     <LinearLayout

@@ -3,6 +3,8 @@ package edu.depaul.csc472.tripz;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,28 +24,26 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
 
 public class MainActivity extends AppCompatActivity {
 
     String userName;
     String userID;
     String userLocation;
-    Bitmap photo;
 
 
 
-    void getProfileImage(String userid) throws IOException {
-        URL image_value = new URL("https://graph.facebook.com/"+userid+"/picture?type=large");
-        //photo = BitmapFactory.decodeStream(image_value.openConnection().getInputStream());
-    }
+
 
     void setInformationToView() throws IOException {
         TextView Line1 = (TextView) findViewById(R.id.txtLine1);
         ImageView imagem1 = (ImageView) findViewById(R.id.imageView);
         Line1.setText(userName);
-
+        new ImageLoadTask("https://graph.facebook.com/"+userID+"/picture?type=large", imagem1).execute();
 
     }
 
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         userName = name;
         userID = id;
-        System.out.println("milloca: "+userName);
+        System.out.println("milloca: " + userName);
         setInformationToView();
     }
 
@@ -107,5 +107,42 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+}
+
+
+
+class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
+
+    private String url;
+    private ImageView imageView;
+
+    public ImageLoadTask(String url, ImageView imageView) {
+        this.url = url;
+        this.imageView = imageView;
+    }
+
+    @Override
+    protected Bitmap doInBackground(Void... params) {
+        try {
+            URL urlConnection = new URL(url);
+            HttpURLConnection connection = (HttpURLConnection) urlConnection
+                    .openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    protected void onPostExecute(Bitmap result) {
+        super.onPostExecute(result);
+        imageView.setImageBitmap(result);
+    }
 
 }
