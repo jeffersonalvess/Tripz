@@ -52,7 +52,7 @@ public class WelcomeScreen extends AppCompatActivity {
 
         if (settings.getBoolean("loginSucessful", false)) {
             Intent intent = new Intent();
-            intent.setClass(WelcomeScreen.this, Test.class);
+            intent.setClass(WelcomeScreen.this, MainActivity.class);
             startActivity(intent);
             finish();
         }
@@ -157,14 +157,16 @@ public class WelcomeScreen extends AppCompatActivity {
 
                 if (profile != null) {
                     //Do something with data obtained
-                    Intent intent = new Intent(PlaceholderFragment.this.getActivity(), Test.class);
-                    startActivity(intent);
+
                 }
 
                 SharedPreferences settings = getContext().getSharedPreferences(FACEBOOK_PREFS, 0); // 0 - for private mode
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putBoolean("loginSucessful", true);
                 editor.commit();
+
+                Intent intent = new Intent(PlaceholderFragment.this.getActivity(), MainActivity.class);
+                startActivity(intent);
 
                 // System.out.println("Facebook Login Successful!");
                 // System.out.println("Logged in user Details : ");
