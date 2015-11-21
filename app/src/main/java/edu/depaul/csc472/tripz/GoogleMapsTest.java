@@ -55,6 +55,8 @@ private static final int GOOGLE_API_CLIENT_ID = 0;
     private PlaceArrayAdapter mPlaceArrayAdapter;
     private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
             new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
+//    private static final LatLngBounds ALL_THE_WORLD = new LatLngBounds(
+//            new LatLng(85, -180), new LatLng(-85, 180));
 
     //private GoogleApiClient client;
 
@@ -66,11 +68,9 @@ private static final int GOOGLE_API_CLIENT_ID = 0;
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
 
-        //client = new GoogleApiClient.Builder(this).build();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(GoogleMapsTest.this)
-                .addApi(Places.GEO_DATA_API)
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(AppIndex.API)
+                .addApi(Places.GEO_DATA_API)
                 .enableAutoManage(this, GOOGLE_API_CLIENT_ID, this)
                 .addConnectionCallbacks(this)
                 .build();
@@ -99,6 +99,16 @@ private static final int GOOGLE_API_CLIENT_ID = 0;
         mPlaceArrayAdapter = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
                 BOUNDS_MOUNTAIN_VIEW, null);
         tvSearch.setAdapter(mPlaceArrayAdapter);
+
+        Button trips_and_cities = (Button) findViewById(R.id.bt1);
+
+        trips_and_cities.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GoogleMapsTest.this, TripsAndCitiesActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void onPickButtonClick(View v) {
@@ -135,9 +145,9 @@ private static final int GOOGLE_API_CLIENT_ID = 0;
                 attributions = "";
             }
 
-            tvName.setText(name);
-            tvAddress.setText(address);
-            tvAtt.setText(Html.fromHtml(attributions));
+            ((TextView)findViewById(R.id.name)).setText(name);
+            ((TextView)findViewById(R.id.address)).setText(address);
+            ((TextView)findViewById(R.id.att)).setText(Html.fromHtml(attributions));
 
         } else {
             super.onActivityResult(requestCode, resultCode, data);

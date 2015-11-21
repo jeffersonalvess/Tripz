@@ -9,11 +9,20 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="edu.depaul.csc472.tripz.GoogleMapsTest">
 
+    <AutoCompleteTextView
+        android:id="@+id/acCity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:hint="Enter Place Here for Search"
+        android:textSize="20dp"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/name"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:layout_below="@+id/acCity"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -34,14 +43,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/att">
 
-        <AutoCompleteTextView
-            android:id="@+id/acCity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:inputType="text|textCapWords|textAutoCorrect|textAutoComplete"
-            android:textSize="20dp"/>
-
     </LinearLayout>
 
     <Button
@@ -49,7 +50,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/busca"
         android:text="teste busca"
-        android:layout_alignParentBottom="true"/>
+        android:layout_above="@+id/bt1"/>
 
     <ImageView
         android:id="@+id/image"
@@ -60,5 +61,14 @@
         android:src="@drawable/powered_by_google_light"
         android:layout_toRightOf="@+id/busca"
         android:layout_alignBaseline="@+id/busca"/>
+
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bt1"
+        android:text="Trips and Cities"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>
