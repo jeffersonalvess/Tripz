@@ -3,13 +3,7 @@
     package="edu.depaul.csc472.tripz">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
-    <!-- Novo Teste -->
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <!-- Fim Novo Teste -->
 
     <application
         android:allowBackup="true"
@@ -23,38 +17,37 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDZKBziz0XCJ9tIkyArB8kIlEzIFn8tGPs"/>
-
-        <!-- Novo Teste -->
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
-        <!-- Fim Novo Teste -->
+            android:value="@integer/google_play_services_version" />
 
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <activity
             android:name=".WelcomeScreen"
             android:label="@string/title_activity_welcome_screen"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".GoogleMapsTest"></activity>
-        <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".TripsAndCitiesActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".GoogleMapsTest"/>
+
     </application>
 
 </manifest>
