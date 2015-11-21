@@ -57,41 +57,41 @@ public class GoogleMapsTest extends AppCompatActivity {
             }
         });
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, MENU);
-        final AutoCompleteTextView tv1 = (AutoCompleteTextView) findViewById(R.id.acCity);
-        tv1.setAdapter(adapter);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, MENU);
+//        final AutoCompleteTextView tv1 = (AutoCompleteTextView) findViewById(R.id.acCity);
+//        tv1.setAdapter(adapter);
 
 
-        tv1.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {
-            }
-
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
-            }
-
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-                LatLngBounds mBounds = new LatLngBounds(new LatLng(85, -180), new LatLng(-85, 180));
-
-//                AutocompleteFilter mAutocompleteFilter = new AutocompleteFilter();
-//                AutocompleteFilter mAutocompleteFilter = new AutocompleteFilter();
+//        tv1.addTextChangedListener(new TextWatcher() {
 //
-//                PendingResult result = Places.GeoDataApi.getAutocompletePredictions(tv1.getText(),
-//                                mBounds, mAutocompleteFilter);
-
-            }
-        });
-
-//        mGoogleApiClient = new GoogleApiClient
-//                .Builder(this)
-//                .addApi(Places.GEO_DATA_API)
-//                .addApi(Places.PLACE_DETECTION_API)
-//                .addConnectionCallbacks(this)
-//                .addOnConnectionFailedListener(this)
-//                .build();
-
+//            public void afterTextChanged(Editable s) {
+//            }
+//
+//            public void beforeTextChanged(CharSequence s, int start,
+//                                          int count, int after) {
+//            }
+//
+//            public void onTextChanged(CharSequence s, int start,
+//                                      int before, int count) {
+//                LatLngBounds mBounds = new LatLngBounds(new LatLng(85, -180), new LatLng(-85, 180));
+//
+////                AutocompleteFilter mAutocompleteFilter = new AutocompleteFilter();
+////                AutocompleteFilter mAutocompleteFilter = new AutocompleteFilter();
+////
+////                PendingResult result = Places.GeoDataApi.getAutocompletePredictions(tv1.getText(),
+////                                mBounds, mAutocompleteFilter);
+//
+//            }
+//        });
+//
+////        mGoogleApiClient = new GoogleApiClient
+////                .Builder(this)
+////                .addApi(Places.GEO_DATA_API)
+////                .addApi(Places.PLACE_DETECTION_API)
+////                .addConnectionCallbacks(this)
+////                .addOnConnectionFailedListener(this)
+////                .build();
+//
     }
 
 
