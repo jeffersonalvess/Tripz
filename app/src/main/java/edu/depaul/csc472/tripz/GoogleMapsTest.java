@@ -5,8 +5,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -16,9 +20,13 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.LatLng;
 
 public class GoogleMapsTest extends AppCompatActivity {
 
@@ -29,6 +37,8 @@ public class GoogleMapsTest extends AppCompatActivity {
      */
 
     private GoogleApiClient client;
+
+    private String[] MENU;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +56,34 @@ public class GoogleMapsTest extends AppCompatActivity {
                 onPickButtonClick(v);
             }
         });
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, MENU);
+        final AutoCompleteTextView tv1 = (AutoCompleteTextView) findViewById(R.id.acCity);
+        tv1.setAdapter(adapter);
+
+
+        tv1.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                LatLngBounds mBounds = new LatLngBounds(new LatLng(85, -180), new LatLng(-85, 180));
+
+//                AutocompleteFilter mAutocompleteFilter = new AutocompleteFilter();
+//                AutocompleteFilter mAutocompleteFilter = new AutocompleteFilter();
+//
+//                PendingResult result = Places.GeoDataApi.getAutocompletePredictions(tv1.getText(),
+//                                mBounds, mAutocompleteFilter);
+
+            }
+        });
+
 //        mGoogleApiClient = new GoogleApiClient
 //                .Builder(this)
 //                .addApi(Places.GEO_DATA_API)
