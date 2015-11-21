@@ -56,7 +56,6 @@ public class WelcomeScreen extends AppCompatActivity {
 
             // Sorry MillocaBR, preciso testar minha activity GOOGLE MAPS
             //intent.setClass(WelcomeScreen.this, GoogleMapsTest.class);
-
             startActivity(intent);
             finish();
         }
@@ -171,6 +170,7 @@ public class WelcomeScreen extends AppCompatActivity {
 
                 Intent intent = new Intent(PlaceholderFragment.this.getActivity(), MainActivity.class);
                 startActivity(intent);
+                getActivity().finish();
 
                 // System.out.println("Facebook Login Successful!");
                 // System.out.println("Logged in user Details : ");
