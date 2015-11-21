@@ -40,7 +40,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textLine3"
+            android:id="@+id/txtLine3"
             android:text="Test Name"
             android:textSize="15sp"
             android:textColor="@android:color/white" />
