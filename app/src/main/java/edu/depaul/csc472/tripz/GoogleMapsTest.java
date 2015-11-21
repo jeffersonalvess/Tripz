@@ -2,6 +2,7 @@ package edu.depaul.csc472.tripz;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,9 +27,13 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.PlaceFilter;
+import com.google.android.gms.location.places.PlaceLikelihood;
+import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -36,9 +41,14 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class GoogleMapsTest extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks {
-private static final String LOG_TAG = "MainActivity";
-private static final int GOOGLE_API_CLIENT_ID = 0;
+        GoogleApiClient.ConnectionCallbacks{
+
+    // Static variable that holds the user's city
+    public static String actual_city;
+
+    private static final String LOG_TAG = "GoogleMapsTest";
+    private static final String LOCATION_TAG = "Actual Location";
+    private static final int GOOGLE_API_CLIENT_ID = 0;
 
     private static final int REQUEST_PLACE_PICKER = 1;
     /**
@@ -72,7 +82,10 @@ private static final int GOOGLE_API_CLIENT_ID = 0;
                 .addApi(AppIndex.API)
                 .addApi(Places.GEO_DATA_API)
                 .enableAutoManage(this, GOOGLE_API_CLIENT_ID, this)
+                .addApi(LocationServices.API)
+                .addApi(Places.PLACE_DETECTION_API)
                 .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
                 .build();
 
         Button button = (Button) findViewById(R.id.busca);
@@ -234,6 +247,38 @@ private static final int GOOGLE_API_CLIENT_ID = 0;
         mPlaceArrayAdapter.setGoogleApiClient(mGoogleApiClient);
         Log.i(LOG_TAG, "Google Places API connected.");
 
+//        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+//                mGoogleApiClient);
+//        if (mLastLocation != null) {
+//            Log.i(LOCATION_TAG, String.valueOf(mLastLocation.getLatitude()));
+//        }
+
+        PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
+                .getCurrentPlace(mGoogleApiClient, null);
+
+        result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
+            @Override
+            public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
+                String city = likelyPlaces.get(0).getPlace().getAddress().toString();
+
+                int v1, v2;
+
+                for(v1 = 0; city.charAt(v1) != ','; v1++);
+                for(v2 = v1+1; city.charAt(v2) != ','; v2++);
+
+                String city2 = city.substring(v1+2, v2+4);
+
+                for(v1 = city.length()-1; city.charAt(v1) != ','; v1--);
+
+                city2 = city2.concat(" - " + city.substring(v1+2));
+
+                Log.i(LOCATION_TAG, city);
+                Log.i(LOCATION_TAG, city2);
+                likelyPlaces.release();
+
+                actual_city = city2;
+            }
+        });
     }
 
     @Override
