@@ -39,6 +39,10 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 public class GoogleMapsTest extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks{
@@ -109,8 +113,16 @@ public class GoogleMapsTest extends AppCompatActivity implements
         tvAddress = (TextView) findViewById(R.id.att);
 
         tvSearch.setOnItemClickListener(mAutocompleteClickListener);
+
+        Collection<Integer> filterTypes = new ArrayList<Integer>();
+        //filterTypes.add(Place.TYPE_LOCALITY);
+        filterTypes.add(Place.TYPE_GEOCODE);
+
+        AutocompleteFilter filter = null;
+        filter = AutocompleteFilter.create(filterTypes);
+
         mPlaceArrayAdapter = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
-                BOUNDS_MOUNTAIN_VIEW, null);
+                BOUNDS_MOUNTAIN_VIEW, filter);
         tvSearch.setAdapter(mPlaceArrayAdapter);
 
         Button trips_and_cities = (Button) findViewById(R.id.bt1);
@@ -120,6 +132,37 @@ public class GoogleMapsTest extends AppCompatActivity implements
             public void onClick(View v) {
                 Intent intent = new Intent(GoogleMapsTest.this, TripsAndCitiesActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        mPlaceArrayAdapter = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
+                BOUNDS_MOUNTAIN_VIEW, filter);
+        tvSearch.setAdapter(mPlaceArrayAdapter);
+
+        PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
+                .getCurrentPlace(mGoogleApiClient, null);
+
+        result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
+            @Override
+            public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
+                String city = likelyPlaces.get(0).getPlace().getAddress().toString();
+
+                int v1, v2;
+
+                for (v1 = 0; city.charAt(v1) != ','; v1++) ;
+                for (v2 = v1 + 1; city.charAt(v2) != ','; v2++) ;
+
+                String city2 = city.substring(v1 + 2, v2 + 4);
+
+                for (v1 = city.length() - 1; city.charAt(v1) != ','; v1--) ;
+
+                city2 = city2.concat(" - " + city.substring(v1 + 2));
+
+                Log.i(LOCATION_TAG, city);
+                Log.i(LOCATION_TAG, city2);
+                likelyPlaces.release();
+
+                actual_city = city2;
             }
         });
     }
@@ -253,32 +296,7 @@ public class GoogleMapsTest extends AppCompatActivity implements
 //            Log.i(LOCATION_TAG, String.valueOf(mLastLocation.getLatitude()));
 //        }
 
-        PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
-                .getCurrentPlace(mGoogleApiClient, null);
 
-        result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
-            @Override
-            public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
-                String city = likelyPlaces.get(0).getPlace().getAddress().toString();
-
-                int v1, v2;
-
-                for(v1 = 0; city.charAt(v1) != ','; v1++);
-                for(v2 = v1+1; city.charAt(v2) != ','; v2++);
-
-                String city2 = city.substring(v1+2, v2+4);
-
-                for(v1 = city.length()-1; city.charAt(v1) != ','; v1--);
-
-                city2 = city2.concat(" - " + city.substring(v1+2));
-
-                Log.i(LOCATION_TAG, city);
-                Log.i(LOCATION_TAG, city2);
-                likelyPlaces.release();
-
-                actual_city = city2;
-            }
-        });
     }
 
     @Override
