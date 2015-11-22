@@ -12,6 +12,7 @@ public class Day /*extends Date*/{
     Integer index;
     Date date;
     private ArrayList<OurPlace> list_place;
+    int renatoBR; //teste
 
     public Day(Integer index, Date date){
         this.index = index;
