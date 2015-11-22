@@ -119,11 +119,13 @@ public class GoogleMapsTest extends AppCompatActivity implements
 //        filterTypes.add(Place.TYPE_ADMINISTRATIVE_AREA_LEVEL_3);
         filterTypes.add(Place.TYPE_GEOCODE);
 
-        //AutocompleteFilter filter = null;
-        //filter = AutocompleteFilter.create(filterTypes);
+//        AutocompleteFilter filter = null;
+//        filter = AutocompleteFilter.create(filterTypes);
 
         mPlaceArrayAdapter = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
                 BOUNDS_MOUNTAIN_VIEW, filterTypes);
+                //BOUNDS_MOUNTAIN_VIEW, filter);
+
         tvSearch.setAdapter(mPlaceArrayAdapter);
 
         PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
