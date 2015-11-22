@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import edu.depaul.csc472.tripz.helper.City;
 import edu.depaul.csc472.tripz.helper.DatabaseHelper;
+import edu.depaul.csc472.tripz.helper.Day;
 import edu.depaul.csc472.tripz.helper.OurDate;
 import edu.depaul.csc472.tripz.helper.Trip;
 
@@ -70,8 +71,8 @@ public class TesteBanco extends AppCompatActivity {
 
         long city1_id = db.createCity(city1);
         long city2_id = db.createCity(city2);
-        //long city3_id = db.createCity(city3);
-        //long city4_id = db.createCity(city4);
+        long city3_id = db.createCity(city3);
+        long city4_id = db.createCity(city4);
 
         Log.d("City Count", "City Count: " + db.getCities().size());
 
@@ -79,9 +80,12 @@ public class TesteBanco extends AppCompatActivity {
 
         for (City c1 : allCities)
         {
-            Log.d("City: ", c1.getId()+ " "+c1.getIdTrip());
-            //Log.d("City: ", c1.getId()+ " "+c1.getIdTrip()+" " +c1.getName()+" " +c1.getStartString()+" "+c1.getEndString());
+            //Log.d("City: ", c1.getId()+ " "+c1.getIdTrip());
+            Log.d("City: ", c1.getId()+ " "+c1.getIdTrip()+" " +c1.getName()+" " +c1.getStartString()+" "+c1.getEndString());
         }
+
+
+        Day day1 = new Day(2, 1, new OurDate("2014/10/18"), );
 
         db.closeDB();
     }

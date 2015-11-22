@@ -233,11 +233,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         {
             do {
                 City aux = new City();
-                //aux.setId(c.getInt((c.getColumnIndex(KEY_ID)) ) );
-                aux.setIdTrip(c.getInt(c.getColumnIndex(KEY_ID_TRIP)) );
+                aux.setId(c.getInt((c.getColumnIndex(KEY_ID)) ) );
+                aux.setIdTrip(c.getInt(c.getColumnIndex(KEY_ID_TRIP)));
                 aux.setName(c.getString(c.getColumnIndex(KEY_NAME)));
-                //aux.setStart(c.getString(c.getColumnIndex(KEY_START_DATE)));
-                //aux.setEnd(c.getString(c.getColumnIndex(KEY_END_DATE)));
+                aux.setStart( OurDate.stringToDate(c.getString(c.getColumnIndex(KEY_START_DATE))) );
+                aux.setEnd( OurDate.stringToDate(c.getString(c.getColumnIndex(KEY_END_DATE))));
 
                 cities.add(aux);
             }while(c.moveToNext());
@@ -269,6 +269,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[] {String.valueOf(city_id)});
     }
 
+
+
+
     //---------------- DAY  ------------------------------------------------------------------------
     public long createDay (Day day)
     {
@@ -276,7 +279,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         //values.put(KEY_ID,);
-        //values.put(KEY_ID_CITY,);
+        values.put(KEY_ID_CITY, day.getIdCity());
         values.put(KEY_INDEX, day.getIndex());
         //values.put(KEY_DATE, day.getDate());
 

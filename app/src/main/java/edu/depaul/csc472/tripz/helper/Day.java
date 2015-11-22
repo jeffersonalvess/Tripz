@@ -10,10 +10,10 @@ public class Day /*extends Date*/{
     private Integer id;
     private Integer id_city;
     Integer index;
-    OurDate date;
+    Date date;
     private ArrayList<OurPlace> list_place;
 
-    public Day(Integer index, OurDate date){
+    public Day(Integer index, Date date){
         this.index = index;
         this.date = date;
         list_place = new ArrayList<OurPlace>();
@@ -21,8 +21,9 @@ public class Day /*extends Date*/{
 
     public Day(){};
 
-    public Day(Integer index, OurDate date, ArrayList<OurPlace> list_place){
+    public Day(Integer idCity, Integer index, Date date, ArrayList<OurPlace> list_place){
         this.index = index;
+        this.id_city = idCity;
         this.date = date;
         this.list_place = list_place;
     }
@@ -55,7 +56,7 @@ public class Day /*extends Date*/{
 
     public String getDateString(){return date.toString();}
 
-    public void setDate(OurDate date){this.date = date;}
+    public void setDate(){this.date = date;}
 
     public ArrayList<OurPlace> getList_place(){return list_place;}
 
