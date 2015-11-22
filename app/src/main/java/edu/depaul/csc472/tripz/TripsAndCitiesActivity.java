@@ -20,6 +20,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import edu.depaul.csc472.tripz.helper.DatabaseHelper;
+import edu.depaul.csc472.tripz.helper.Trip;
+
 public class TripsAndCitiesActivity extends AppCompatActivity {
 
     int day, month, year, dayS, monthS, yearS;
@@ -40,8 +43,8 @@ public class TripsAndCitiesActivity extends AppCompatActivity {
         TextView txtCity = (TextView) findViewById(R.id.txtVCity);
         TextView startDate = (TextView) findViewById(R.id.txtStartDate);
         TextView endDate = (TextView) findViewById(R.id.txtEndDate);
-        EditText editTrip = (EditText) findViewById(R.id.editTrip);
-        EditText editCity = (EditText) findViewById(R.id.editCity);
+        final EditText editTrip = (EditText) findViewById(R.id.editTrip);
+        final EditText editCity = (EditText) findViewById(R.id.editCity);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
@@ -78,8 +81,20 @@ public class TripsAndCitiesActivity extends AppCompatActivity {
                     //
                     // Insert here the code to insert a new Trip on database.
                     //
-                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    String tripName = String.valueOf(editTrip.getText());
+                    String snack = "You need to give a name for your new trip.";
+
+                    if(!tripName.equals("")) {
+                        Trip t = new Trip(tripName);
+                        DatabaseHelper d = new DatabaseHelper(getApplicationContext());
+                        d.createTrip(t);
+
+                        Snackbar.make(view, "Trip created.", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                        onBackPressed();
+                        finish();
+                    }
+
+                    Snackbar.make(view, snack, Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
             });
         }

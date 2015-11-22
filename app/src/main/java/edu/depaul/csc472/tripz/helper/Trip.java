@@ -2,8 +2,6 @@ package edu.depaul.csc472.tripz.helper;
 
 import java.util.ArrayList;
 
-import edu.depaul.csc472.tripz.helper.City;
-
 /**
  * Created by Miller on 19/11/2015.
  */
@@ -101,5 +99,9 @@ public class Trip {
 
     public void setCity_list(ArrayList<City> city_list) {
         this.city_list = city_list;
+    }
+
+    public String toString() {
+        return name;
     }
 }

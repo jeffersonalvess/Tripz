@@ -25,11 +25,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TripListFragment.Callbacks {
 
     String userName;
     String userID;
     String userLocation;
+    boolean mTwoPane = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
                         try {
                             //userLocation = object.getJSONObject("user_location").getString("name");
-                            saveProfileInformation(object.getString("first_name") + " " +  object.getString("last_name"), object.getString("id"));
+                            saveProfileInformation(object.getString("first_name") + " " + object.getString("last_name"), object.getString("id"));
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -80,14 +81,16 @@ public class MainActivity extends AppCompatActivity {
         request.setParameters(parameters);
         request.executeAsync();
 
+
+        //Fragment call << Need improvement to implement tablet compatibility>>
+        ((TripListFragment) getFragmentManager().findFragmentById(R.id.trips_list)).setActivateOnItemClick(true);
+
     }
 
     void saveProfileInformation(String name, String id) throws IOException {
 
         userName = name;
         userID = id;
-        //userLocation = location;
-        //System.out.println("milloca: " + userName);
         setInformationToView();
     }
 
@@ -104,7 +107,38 @@ public class MainActivity extends AppCompatActivity {
         new ImageLoadTask("https://graph.facebook.com/" + userID + "/picture?type=large", imagem1).execute();
 
     }
+
+    @Override
+    public void onItemSelected(String id) {
+        /* Use this when implement two panel layout, it's not implement yet. But I'll left the code for example.
+
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            Bundle arguments = new Bundle();
+            arguments.putString(WineDetailFragment.ARG_ITEM_ID, id);
+            WineDetailFragment fragment = new WineDetailFragment();
+            fragment.setArguments(arguments);
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.wine_detail_container, fragment)
+                    .commit();
+
+        }
+        else {
+            // In single-pane mode, simply start the detail activity
+            // for the selected item ID.
+            Intent detailIntent = new Intent(this, WineDetailActivity.class);
+            detailIntent.putExtra(WineDetailFragment.ARG_ITEM_ID, id);
+            startActivity(detailIntent);
+        }*/
+
+        Intent cityIntent = new Intent(MainActivity.this, CitiesActivity.class);
+        cityIntent.putExtra("TripID", id);
+        startActivity(cityIntent);
+    }
 }
+
 
 class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
 
@@ -139,3 +173,5 @@ class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
     }
 
 }
+
+
