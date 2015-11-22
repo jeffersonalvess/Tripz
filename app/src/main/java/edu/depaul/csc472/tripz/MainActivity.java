@@ -102,6 +102,8 @@ public class MainActivity extends AppCompatActivity implements TripListFragment.
         ImageView imagem1 = (ImageView) findViewById(R.id.imageView);
 
         Line1.setText(userName);
+
+        //TODO: Change "Location" by the real user location
         Line2.setText("Location");
         Line3.setVisibility(View.INVISIBLE);
         new ImageLoadTask("https://graph.facebook.com/" + userID + "/picture?type=large", imagem1).execute();
@@ -109,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements TripListFragment.
     }
 
     @Override
-    public void onItemSelected(String id) {
+    public void onItemSelected(int id) {
         /* Use this when implement two panel layout, it's not implement yet. But I'll left the code for example.
 
         if (mTwoPane) {

@@ -2,12 +2,15 @@ package edu.depaul.csc472.tripz;
 
 import android.app.Activity;
 import android.app.ListFragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -35,13 +38,13 @@ public class TripListFragment extends ListFragment {
     /** A callback interface that all activities containing this fragment must implement. This mechanism allows activities to be notified of item selections. */
     public interface Callbacks {
         /**  Callback for when an item has been selected. */
-        public void onItemSelected(String id);
+        public void onItemSelected(int id);
     }
 
     /** A dummy implementation of the {@link Callbacks} interface that does nothing. Used only when this fragment is not attached to an activity. */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onItemSelected(String id) {
+        public void onItemSelected(int id) {
         }
     };
 
@@ -50,17 +53,8 @@ public class TripListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
         DatabaseHelper d = new DatabaseHelper(getActivity());
-        setListAdapter(
-                //Replace with a real ArrayAdapter
-                new ArrayAdapter<Trip>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, d.getTrips())
-        );
+        setListAdapter(new TripsAdapter(getActivity()));
 
     }
 
@@ -109,7 +103,7 @@ public class TripListFragment extends ListFragment {
         DatabaseHelper d = new DatabaseHelper(getActivity());
         ArrayList<Trip> trips = d.getTrips();
 
-        mCallbacks.onItemSelected(trips.get(position).getName());
+        mCallbacks.onItemSelected(trips.get(position).getId());
     }
 
     @Override
@@ -138,5 +132,73 @@ public class TripListFragment extends ListFragment {
         }
 
         mActivatedPosition = position;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((TripsAdapter) getListAdapter()).notifyDataSetChanged();
+    }
+
+    ///// Callback from WineDetailFragment. For two-pane layout
+    public void onItemChanged() {
+        ((TripsAdapter) getListAdapter()).notifyDataSetChanged();
+    }
+
+
+    static class TripsAdapter extends BaseAdapter {
+
+        private LayoutInflater inflater;
+        private DatabaseHelper databaseHelper;
+
+        TripsAdapter(Context context) {
+            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            databaseHelper = new DatabaseHelper(context);
+        }
+
+        @Override
+        public int getCount() { return databaseHelper.getTrips().size();}
+
+        @Override
+        public Object getItem(int position) {return databaseHelper.getTrips().get(position);}
+
+        @Override
+        public long getItemId(int position) {return position;}
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder viewHolder;
+            View row = convertView;
+
+            if (row == null) {
+                row = inflater.inflate(R.layout.list_item_content, parent, false);
+                viewHolder = new ViewHolder();
+
+                viewHolder.icon = (ImageView) row.findViewById(R.id.imgIcon);
+                viewHolder.title = (TextView) row.findViewById(R.id.txtTitle);
+                viewHolder.line1 = (TextView) row.findViewById(R.id.txtLine1);
+                viewHolder.line2 = (TextView) row.findViewById(R.id.txtLine2);
+                row.setTag(viewHolder);
+            }
+            else
+                viewHolder = (ViewHolder) row.getTag();
+
+            Trip t = databaseHelper.getTrips().get(position);
+            viewHolder.icon.setImageResource(android.R.drawable.ic_dialog_map);
+            viewHolder.title.setText(t.getName());
+
+            //TODO: Include methods to show the date.
+            viewHolder.line1.setText("START - END");
+            viewHolder.line2.setVisibility(View.GONE);
+
+            return row;
+        }
+
+        static class ViewHolder {
+            ImageView icon;
+            TextView title;
+            TextView line1;
+            TextView line2;
+        }
     }
 }
