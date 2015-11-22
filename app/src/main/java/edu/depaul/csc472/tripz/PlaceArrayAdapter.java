@@ -18,6 +18,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -27,7 +29,8 @@ public class PlaceArrayAdapter
         extends ArrayAdapter<PlaceArrayAdapter.PlaceAutocomplete> implements Filterable {
     private static final String TAG = "PlaceArrayAdapter";
     private GoogleApiClient mGoogleApiClient;
-    private AutocompleteFilter mPlaceFilter;
+    //private AutocompleteFilter mPlaceFilter;
+    private ArrayList<Integer> mPlaceFilter;
     private LatLngBounds mBounds;
     private ArrayList<PlaceAutocomplete> mResultList;
 
@@ -40,7 +43,7 @@ public class PlaceArrayAdapter
      * @param filter   Used to specify place types
      */
     public PlaceArrayAdapter(Context context, int resource, LatLngBounds bounds,
-                             AutocompleteFilter filter) {
+                             ArrayList<Integer> filter) {
         super(context, resource);
         mBounds = bounds;
         mPlaceFilter = filter;
@@ -70,7 +73,7 @@ public class PlaceArrayAdapter
             PendingResult<AutocompletePredictionBuffer> results =
                     Places.GeoDataApi
                             .getAutocompletePredictions(mGoogleApiClient, constraint.toString(),
-                                    mBounds, mPlaceFilter);
+                                    mBounds, null);
             // Wait for predictions, set the timeout.
             AutocompletePredictionBuffer autocompletePredictions = results
                     .await(60, TimeUnit.SECONDS);
@@ -90,8 +93,30 @@ public class PlaceArrayAdapter
             ArrayList resultList = new ArrayList<>(autocompletePredictions.getCount());
             while (iterator.hasNext()) {
                 AutocompletePrediction prediction = iterator.next();
-                resultList.add(new PlaceAutocomplete(prediction.getPlaceId(),
-                        prediction.getDescription()));
+
+                if(mPlaceFilter.size() > 0) {
+                    List<Integer> place_types = prediction.getPlaceTypes();
+
+                    int match = 0;
+
+                    for (int j = 0; match == 0 && j < mPlaceFilter.size(); j++) {
+                        for (int i = 0; match == 0 && i < place_types.size(); i++) {
+                            if (place_types.get(i).equals(mPlaceFilter.get(j))) {
+                                match = 1;
+                            }
+                        }
+                    }
+
+                    if (match == 1) {
+                        resultList.add(new PlaceAutocomplete(prediction.getPlaceId(),
+                                prediction.getDescription()));
+                    }
+                }
+                else{
+                    resultList.add(new PlaceAutocomplete(prediction.getPlaceId(),
+                            prediction.getDescription()));
+                }
+
             }
             // Buffer release
             autocompletePredictions.release();
