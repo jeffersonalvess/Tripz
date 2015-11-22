@@ -8,13 +8,23 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
+import com.google.android.gms.location.places.Places;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,17 +35,29 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 
-public class MainActivity extends AppCompatActivity implements TripListFragment.Callbacks {
+public class MainActivity extends AppCompatActivity implements TripListFragment.Callbacks,
+        GoogleApiClient.OnConnectionFailedListener{
+
+    private static final String LOG_TAG = "MainActivity";
 
     String userName;
     String userID;
     String userLocation;
     boolean mTwoPane = false;
 
+    private static final int GOOGLE_API_CLIENT_ID = 2;
+    private GoogleApiClient mGoogleApiClient;
+
+    public static String actual_city;
+
+    private TextView Line2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ((TextView) findViewById(R.id.txtLine2)).setText("");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Tripz");
@@ -84,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements TripListFragment.
         //Fragment call << Need improvement to implement tablet compatibility>>
         ((TripListFragment) getFragmentManager().findFragmentById(R.id.trips_list)).setActivateOnItemClick(true);
 
+        // Get Actual Location and set the static variable actual_place
+        setActualLocation();
     }
 
     void saveProfileInformation(String name, String id) throws IOException {
@@ -96,14 +120,12 @@ public class MainActivity extends AppCompatActivity implements TripListFragment.
     void setInformationToView() throws IOException {
 
         TextView Line1 = (TextView) findViewById(R.id.txtLine1);
-        TextView Line2 = (TextView) findViewById(R.id.txtLine2);
+
         TextView Line3 = (TextView) findViewById(R.id.txtLine3);
         ImageView imagem1 = (ImageView) findViewById(R.id.imageView);
 
         Line1.setText(userName);
 
-        //TODO: Change "Location" by the real user location
-        Line2.setText("Location");
         Line3.setVisibility(View.INVISIBLE);
         new ImageLoadTask("https://graph.facebook.com/" + userID + "/picture?type=large", imagem1).execute();
 
@@ -137,6 +159,52 @@ public class MainActivity extends AppCompatActivity implements TripListFragment.
         Intent cityIntent = new Intent(MainActivity.this, CitiesActivity.class);
         cityIntent.putExtra("TripID", id);
         startActivity(cityIntent);
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.e(LOG_TAG, "Google Places API connection failed with error code: "
+                + connectionResult.getErrorCode());
+
+        Toast.makeText(this,
+                "Google Places API connection failed with error code:" +
+                        connectionResult.getErrorCode(),
+                Toast.LENGTH_LONG).show();
+    }
+
+    void setActualLocation(){
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, GOOGLE_API_CLIENT_ID, this)
+                .addApi(Places.PLACE_DETECTION_API)
+                .build();
+
+        PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
+                .getCurrentPlace(mGoogleApiClient, null);
+
+        result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
+            @Override
+            public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
+                //Line2 = (TextView) findViewById(R.id.txtLine2);
+                String city = likelyPlaces.get(0).getPlace().getAddress().toString();
+
+                int v1, v2;
+
+                for (v1 = 0; city.charAt(v1) != ','; v1++) ;
+                for (v2 = v1 + 1; city.charAt(v2) != ','; v2++) ;
+
+                String city2 = city.substring(v1 + 2, v2 + 4);
+
+                for (v1 = city.length() - 1; city.charAt(v1) != ','; v1--) ;
+
+                city2 = city2.concat(" - " + city.substring(v1 + 2));
+                likelyPlaces.release();
+
+                actual_city = city2;
+
+                //Line2.setText(actual_city);
+                ((TextView) findViewById(R.id.txtLine2)).setText(actual_city);
+            }
+        });
     }
 }
 
@@ -172,7 +240,6 @@ class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
         super.onPostExecute(result);
         imageView.setImageBitmap(result);
     }
-
 }
 
 

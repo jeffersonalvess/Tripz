@@ -39,7 +39,6 @@ public class GoogleMapsTest extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks{
 
     // Static variable that holds the user's city
-    public static String actual_city;
 
     private static final String LOG_TAG = "GoogleMapsTest";
     private static final String LOCATION_TAG = "Actual Location";
@@ -124,32 +123,32 @@ public class GoogleMapsTest extends AppCompatActivity implements
 
 
         // ***** Get Last Location ****************************************************************
-        PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
-                .getCurrentPlace(mGoogleApiClient, null);
-
-        result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
-            @Override
-            public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
-                String city = likelyPlaces.get(0).getPlace().getAddress().toString();
-
-                int v1, v2;
-
-                for (v1 = 0; city.charAt(v1) != ','; v1++) ;
-                for (v2 = v1 + 1; city.charAt(v2) != ','; v2++) ;
-
-                String city2 = city.substring(v1 + 2, v2 + 4);
-
-                for (v1 = city.length() - 1; city.charAt(v1) != ','; v1--) ;
-
-                city2 = city2.concat(" - " + city.substring(v1 + 2));
-
-                Log.i(LOCATION_TAG, city);
-                Log.i(LOCATION_TAG, city2);
-                likelyPlaces.release();
-
-                actual_city = city2;
-            }
-        });
+//        PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
+//                .getCurrentPlace(mGoogleApiClient, null);
+//
+//        result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
+//            @Override
+//            public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
+//                String city = likelyPlaces.get(0).getPlace().getAddress().toString();
+//
+//                int v1, v2;
+//
+//                for (v1 = 0; city.charAt(v1) != ','; v1++) ;
+//                for (v2 = v1 + 1; city.charAt(v2) != ','; v2++) ;
+//
+//                String city2 = city.substring(v1 + 2, v2 + 4);
+//
+//                for (v1 = city.length() - 1; city.charAt(v1) != ','; v1--) ;
+//
+//                city2 = city2.concat(" - " + city.substring(v1 + 2));
+//
+//                Log.i(LOCATION_TAG, city);
+//                Log.i(LOCATION_TAG, city2);
+//                likelyPlaces.release();
+//
+//                actual_city = city2;
+//            }
+//        });
 
 
 

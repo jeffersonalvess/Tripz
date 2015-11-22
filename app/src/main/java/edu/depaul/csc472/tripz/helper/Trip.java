@@ -1,6 +1,7 @@
 package edu.depaul.csc472.tripz.helper;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Miller on 19/11/2015.
@@ -9,25 +10,35 @@ import java.util.ArrayList;
 public class Trip {
     private Integer id;
     private String name;
-    private String startDate;
-    private String endDate;
+    private OurDate start;
+    private OurDate end;
     private ArrayList<City> city_list;
 
     public Trip(String name) {
         this.name = name;
         city_list = new ArrayList<City>();
+        start = new OurDate("1992/02/28");
+        end = new OurDate("1992/02/28");
     }
+
     public Trip(Integer id, String name) {
         this.id = id;
         this.name = name;
         city_list = new ArrayList<City>();
+        start = new OurDate("1992/02/28");
+        end = new OurDate("1992/02/28");
     }
 
-    public Trip(){};
+    public Trip(){
+        city_list = new ArrayList<City>();
+        start = new OurDate("1992/02/28");
+        end = new OurDate("1992/02/28");};
 
     public Trip(String name, ArrayList<City> city_list) {
         this.name = name;
         this.city_list = city_list;
+        start = new OurDate("1992/02/28");
+        end = new OurDate("1992/02/28");
     }
 
     public void setId(Integer id){this.id = id;}
@@ -36,10 +47,29 @@ public class Trip {
 
     public void addCity(City city) {
         city_list.add(city);
+
+        if(city.getStart().before(start) && city.getEnd().before(end)){
+            start.setDate(city.getStart());
+        }
+        else if(city.getStart().after(start) && city.getEnd().after(end)){
+            end.setDate(city.getEnd());
+        }
     }
 
     public void removeCity(int index) {
         city_list.remove(index);
+        OurDate temp = new OurDate(start);
+        start.setDate(end);
+        end.setDate(temp);
+
+        for(int i = 0; i < city_list.size(); i++){
+            if(city_list.get(i).getStart().before(start)){
+                start.setDate(city_list.get(i).getStart());
+            }
+            if(city_list.get(i).getEnd().after(end)){
+                end.setDate(city_list.get(i).getEnd());
+            }
+        }
     }
 
     public void removeCity(String name) {
@@ -77,20 +107,24 @@ public class Trip {
         this.name = name;
     }
 
-    public String getStartDate() {
-        return startDate;
+    public OurDate getStart() {
+        return start;
     }
 
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
+    public void setStart(String start) {
+        this.start.setDate(start);
     }
 
-    public String getEndDate() {
-        return endDate;
+    public OurDate getEnd() {
+        return end;
     }
 
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
+    public void setEnd(String end) {
+        this.end.setDate(end);
+    }
+
+    public void setEnd(Date end) {
+        this.end.setDate(end);
     }
 
     public ArrayList<City> getCity_list() {

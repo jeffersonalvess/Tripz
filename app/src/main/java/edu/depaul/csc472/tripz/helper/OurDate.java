@@ -11,6 +11,12 @@ import java.util.Date;
 public class OurDate extends Date{
     public static final SimpleDateFormat curFormater = new SimpleDateFormat("yyyy/MM/dd");
 
+    public static final SimpleDateFormat americanDate = new SimpleDateFormat("MM/dd/yyyy");
+
+    public OurDate(){
+        super();
+    }
+
     public OurDate(Date date){
         super(date.getTime());
     }
@@ -23,12 +29,22 @@ public class OurDate extends Date{
         super(curFormater.parse(s, new ParsePosition(0)).getTime());
     }
 
-    public void setDate(OurDate date){
+    public void setDate(Date date){
         setTime(date.getTime());
+    }
+
+    public void setDate(String date){
+        setTime(new OurDate(date).getTime());
     }
 
     public String toString(){
         return curFormater.format(this);
+    }
+
+    public String getAmericanDate(){return americanDate.format(this);}
+
+    public void setAmericanDate(String s){
+        setTime(americanDate.parse(s, new ParsePosition(0)).getTime());
     }
 
     public OurDate addDaysOnDate(int days){
@@ -37,7 +53,7 @@ public class OurDate extends Date{
         return new OurDate(getTime() + daysInMilli);
     }
 
-    public long duration(OurDate date){
+    public long duration(Date date){
         long different;
         //milliseconds
         if(before(date))
