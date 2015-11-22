@@ -10,6 +10,7 @@ import java.util.Date;
 public class City {
     private Integer id;
     private Integer id_trip;
+    private String id_maps;
     private String name;
     private ArrayList<Day> list_day;
     private OurDate start;
@@ -47,6 +48,10 @@ public class City {
 //            System.out.println("Dia " + (i+1) + ": " + WelcomeScreen.curFormater.format(d));
         }
     }
+
+    public String getId_maps(){return id_maps;}
+
+    public void setId_maps(String id_maps){this.id_maps = id_maps;}
 
     public void setId(Integer id){ this.id = id;}
 

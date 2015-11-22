@@ -43,7 +43,7 @@
         android:layout_alignBottom="@+id/editCity"
         android:layout_alignParentStart="true" />
 
-    <EditText
+    <AutoCompleteTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editCity"

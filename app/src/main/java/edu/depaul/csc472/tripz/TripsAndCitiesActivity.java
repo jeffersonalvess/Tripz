@@ -3,20 +3,39 @@ package edu.depaul.csc472.tripz;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -25,7 +44,9 @@ import edu.depaul.csc472.tripz.helper.DatabaseHelper;
 import edu.depaul.csc472.tripz.helper.OurDate;
 import edu.depaul.csc472.tripz.helper.Trip;
 
-public class TripsAndCitiesActivity extends AppCompatActivity {
+public class TripsAndCitiesActivity extends AppCompatActivity implements
+        GoogleApiClient.OnConnectionFailedListener,
+        GoogleApiClient.ConnectionCallbacks {
 
     int day, month, year, dayS, monthS, yearS;
     String whoIsMyMother = "";
@@ -33,11 +54,26 @@ public class TripsAndCitiesActivity extends AppCompatActivity {
     final static int DIALOG_ID1 = 0;
     final static int DIALOG_ID2 = 1;
 
+    private static final String LOG_TAG = "TripsAndCities";
+
+    private GoogleApiClient mGoogleApiClient;
+    private PlaceArrayAdapter mPlaceArrayAdapter;
+
+    private static final int GOOGLE_API_CLIENT_ID = 3;
+
+    private static LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
+            new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
+
+    private AutoCompleteTextView editCity;
+
+    private Place place;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trips_and_cities);
+
+        setAutoComplete();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         final Button btnStart = (Button) findViewById(R.id.btnStart);
@@ -269,4 +305,119 @@ public class TripsAndCitiesActivity extends AppCompatActivity {
         return true;
     }
 
+    private void setAutoComplete(){
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(AppIndex.API)
+                .addApi(Places.GEO_DATA_API)
+                .enableAutoManage(this, GOOGLE_API_CLIENT_ID, this)
+                .addApi(LocationServices.API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+
+        editCity = (AutoCompleteTextView) findViewById(R.id.editCity);
+
+        editCity.setThreshold(3);
+
+        editCity.setOnItemClickListener(mAutocompleteClickListener);
+
+        ArrayList<Integer> filterTypes = new ArrayList<Integer>();
+        filterTypes.add(Place.TYPE_GEOCODE);
+        filterTypes.add(Place.TYPE_LOCALITY);
+        filterTypes.add(Place.TYPE_ADMINISTRATIVE_AREA_LEVEL_3);
+
+        mPlaceArrayAdapter = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
+                BOUNDS_MOUNTAIN_VIEW, filterTypes);
+
+
+        editCity.setAdapter(mPlaceArrayAdapter);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        mGoogleApiClient.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW,
+                "GoogleMapsTest Page",
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                Uri.parse("android-app://edu.depaul.csc472.tripz/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(mGoogleApiClient, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW,
+                "GoogleMapsTest Page",
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                Uri.parse("android-app://edu.depaul.csc472.tripz/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(mGoogleApiClient, viewAction);
+        mGoogleApiClient.disconnect();
+    }
+
+    private AdapterView.OnItemClickListener mAutocompleteClickListener
+            = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            final PlaceArrayAdapter.PlaceAutocomplete item = mPlaceArrayAdapter.getItem(position);
+            final String placeId = String.valueOf(item.placeId);
+            Log.i(LOG_TAG, "Selected: " + item.description);
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+                    .getPlaceById(mGoogleApiClient, placeId);
+            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
+            Log.i(LOG_TAG, "Fetching details for ID: " + item.placeId);
+        }
+    };
+
+    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
+            = new ResultCallback<PlaceBuffer>() {
+        @Override
+        public void onResult(PlaceBuffer places) {
+            if (!places.getStatus().isSuccess()) {
+                Log.e(LOG_TAG, "Place query did not complete. Error: " +
+                        places.getStatus().toString());
+                return;
+            }
+            // Selecting the first object buffer.
+            place = places.get(0);
+        }
+    };
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        mPlaceArrayAdapter.setGoogleApiClient(mGoogleApiClient);
+        Log.i(LOG_TAG, "Google Places API connected.");
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.e(LOG_TAG, "Google Places API connection failed with error code: "
+                + connectionResult.getErrorCode());
+
+        Toast.makeText(this,
+                "Google Places API connection failed with error code:" +
+                        connectionResult.getErrorCode(),
+                Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        mPlaceArrayAdapter.setGoogleApiClient(null);
+        Log.e(LOG_TAG, "Google Places API connection suspended.");
+    }
 }

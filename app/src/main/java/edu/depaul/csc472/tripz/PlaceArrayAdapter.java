@@ -56,6 +56,8 @@ public class PlaceArrayAdapter
         for(int i = 0; i < filter.size(); i++){
             if(filter.get(i).equals(Place.TYPE_GEOCODE) || filter.get(i).equals(Place.TYPE_ESTABLISHMENT)){
                 filterTypes.add(filter.get(i));
+                filter.remove(i);
+                i--;
             }
         }
 

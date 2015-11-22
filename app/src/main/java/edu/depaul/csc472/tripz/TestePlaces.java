@@ -66,16 +66,16 @@ public class TestePlaces extends AppCompatActivity implements
         Intent intent = getIntent();
 
         lat = intent.getDoubleExtra("LAT", -190);
-        lng = intent.getDoubleExtra("LGN", -190);
+        lng = intent.getDoubleExtra("LNG", -190);
 
-        Log.i(LOG_TAG, "UFA");
-
-        if(lat == -190 || lng == 190)
+        if(lat == -190 || lng == -190)
             BOUNDS = new LatLngBounds(new LatLng(37.398160, -122.180831),
                     new LatLng(37.430610, -121.972090));
-        else
-            BOUNDS = new LatLngBounds(new LatLng(lat-0.5, lng-0.5),
-                    new LatLng(lat+0.5, lng+0.5));
+        else {
+            Log.i(LOG_TAG, lat + " " + lng);
+            BOUNDS = new LatLngBounds(new LatLng((lat - 0.5), (lng - 0.5)),
+                    new LatLng((lat + 0.5), (lng + 0.5)));
+        }
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(AppIndex.API)

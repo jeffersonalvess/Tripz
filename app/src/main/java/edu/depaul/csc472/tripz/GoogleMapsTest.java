@@ -71,6 +71,9 @@ public class GoogleMapsTest extends AppCompatActivity implements
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
 
+        lat = -190;
+        lng = -190;
+
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(AppIndex.API)
                 .addApi(Places.GEO_DATA_API)
@@ -122,38 +125,6 @@ public class GoogleMapsTest extends AppCompatActivity implements
 
 
 
-        // ***** Get Last Location ****************************************************************
-//        PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
-//                .getCurrentPlace(mGoogleApiClient, null);
-//
-//        result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
-//            @Override
-//            public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
-//                String city = likelyPlaces.get(0).getPlace().getAddress().toString();
-//
-//                int v1, v2;
-//
-//                for (v1 = 0; city.charAt(v1) != ','; v1++) ;
-//                for (v2 = v1 + 1; city.charAt(v2) != ','; v2++) ;
-//
-//                String city2 = city.substring(v1 + 2, v2 + 4);
-//
-//                for (v1 = city.length() - 1; city.charAt(v1) != ','; v1--) ;
-//
-//                city2 = city2.concat(" - " + city.substring(v1 + 2));
-//
-//                Log.i(LOCATION_TAG, city);
-//                Log.i(LOCATION_TAG, city2);
-//                likelyPlaces.release();
-//
-//                actual_city = city2;
-//            }
-//        });
-
-
-
-
-
         // ***** Test Buttons *********************************************************************
         Button trips_and_cities = (Button) findViewById(R.id.bt1);
 
@@ -184,8 +155,6 @@ public class GoogleMapsTest extends AppCompatActivity implements
 
                 intent.putExtra("LAT", lat);
                 intent.putExtra("LNG", lng);
-
-                Log.i("TESTE BT", "BLZ");
 
                 startActivity(intent);
             }
