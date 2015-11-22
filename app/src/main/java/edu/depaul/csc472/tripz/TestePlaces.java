@@ -179,8 +179,14 @@ public class TestePlaces extends AppCompatActivity implements
             tvName2.setText(Html.fromHtml(place.getName() + ""));
             tvAddress2.setText(Html.fromHtml(place.getAddress() + ""));
             tvLatLong2.setText(Html.fromHtml(place.getLatLng().toString() + ""));
-            tvPhone.setText(Html.fromHtml(place.getPhoneNumber().toString() + ""));
-            tvWebPage.setText(Html.fromHtml(place.getWebsiteUri().toString() + ""));
+            if(place.getPhoneNumber() != null)
+                tvPhone.setText(Html.fromHtml(place.getPhoneNumber().toString() + ""));
+            else
+                tvPhone.setText("");
+            if(place.getWebsiteUri() != null)
+                tvWebPage.setText(Html.fromHtml(place.getWebsiteUri().toString() + ""));
+            else
+                tvWebPage.setText("");
 
             if (attributions != null) {
                 tvAtt2.setText(Html.fromHtml(attributions.toString()));
