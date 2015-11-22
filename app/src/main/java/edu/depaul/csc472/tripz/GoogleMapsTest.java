@@ -114,29 +114,18 @@ public class GoogleMapsTest extends AppCompatActivity implements
 
         tvSearch.setOnItemClickListener(mAutocompleteClickListener);
 
-        Collection<Integer> filterTypes = new ArrayList<Integer>();
-        //filterTypes.add(Place.TYPE_LOCALITY);
+        ArrayList<Integer> filterTypes = new ArrayList<Integer>();
+//        filterTypes.add(Place.TYPE_LOCALITY);
+//        filterTypes.add(Place.TYPE_ADMINISTRATIVE_AREA_LEVEL_3);
         filterTypes.add(Place.TYPE_GEOCODE);
 
-        AutocompleteFilter filter = null;
-        filter = AutocompleteFilter.create(filterTypes);
+//        AutocompleteFilter filter = null;
+//        filter = AutocompleteFilter.create(filterTypes);
 
         mPlaceArrayAdapter = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
-                BOUNDS_MOUNTAIN_VIEW, filter);
-        tvSearch.setAdapter(mPlaceArrayAdapter);
+                BOUNDS_MOUNTAIN_VIEW, filterTypes);
+                //BOUNDS_MOUNTAIN_VIEW, filter);
 
-        Button trips_and_cities = (Button) findViewById(R.id.bt1);
-
-        trips_and_cities.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(GoogleMapsTest.this, TripsAndCitiesActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        mPlaceArrayAdapter = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
-                BOUNDS_MOUNTAIN_VIEW, filter);
         tvSearch.setAdapter(mPlaceArrayAdapter);
 
         PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
@@ -163,6 +152,16 @@ public class GoogleMapsTest extends AppCompatActivity implements
                 likelyPlaces.release();
 
                 actual_city = city2;
+            }
+        });
+
+        Button trips_and_cities = (Button) findViewById(R.id.bt1);
+
+        trips_and_cities.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GoogleMapsTest.this, TripsAndCitiesActivity.class);
+                startActivity(intent);
             }
         });
     }
