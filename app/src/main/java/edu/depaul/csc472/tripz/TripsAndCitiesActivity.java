@@ -2,6 +2,7 @@ package edu.depaul.csc472.tripz;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -10,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ import java.util.Date;
 public class TripsAndCitiesActivity extends AppCompatActivity {
 
     int day, month, year, dayS, monthS, yearS;
+    String whoIsMyMother = "";
     final static int DIALOG_ID1 = 0;
     final static int DIALOG_ID2 = 1;
 
@@ -33,10 +36,15 @@ public class TripsAndCitiesActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         final Button btnStart = (Button) findViewById(R.id.btnStart);
         final Button btnEnd = (Button) findViewById(R.id.btnEnd);
+        TextView txtTrip = (TextView) findViewById(R.id.txtTrip);
+        TextView txtCity = (TextView) findViewById(R.id.txtVCity);
+        TextView startDate = (TextView) findViewById(R.id.txtStartDate);
+        TextView endDate = (TextView) findViewById(R.id.txtEndDate);
+        EditText editTrip = (EditText) findViewById(R.id.editTrip);
+        EditText editCity = (EditText) findViewById(R.id.editCity);
 
-        //Edit this to get information from the UI that is calling this activity
-        //Then adapt the title correctly
-        toolbar.setTitle("New Trip");
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -48,14 +56,34 @@ public class TripsAndCitiesActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
+        Intent intent = getIntent();
+        if(intent != null)
+            whoIsMyMother = intent.getStringExtra("activityMother");
+
+
+        if (whoIsMyMother.equals("MainActivity")) {
+
+            toolbar.setTitle("New Trip");
+            txtCity.setVisibility(View.GONE);
+            editCity.setVisibility(View.GONE);
+            startDate.setVisibility(View.INVISIBLE);
+            endDate.setVisibility(View.INVISIBLE);
+            btnEnd.setVisibility(View.INVISIBLE);
+            btnStart.setVisibility(View.INVISIBLE);
+
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //
+                    // Insert here the code to insert a new Trip on database.
+                    //
+                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            });
+        }
+
 
         View.OnClickListener showDatePickerDialog = new View.OnClickListener() {
             @Override

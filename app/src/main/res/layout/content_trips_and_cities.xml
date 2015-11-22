@@ -18,14 +18,14 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Trip Name"
         android:id="@+id/txtTrip"
-        android:layout_alignBaseline="@+id/editText"
-        android:layout_alignBottom="@+id/editText"
+        android:layout_alignBaseline="@+id/editTrip"
+        android:layout_alignBottom="@+id/editTrip"
         android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
+        android:id="@+id/editTrip"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/txtTrip"
         android:layout_marginStart="27dp"
@@ -38,16 +38,16 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="City"
         android:id="@+id/txtVCity"
-        android:layout_alignBaseline="@+id/editText2"
-        android:layout_alignBottom="@+id/editText2"
+        android:layout_alignBaseline="@+id/editCity"
+        android:layout_alignBottom="@+id/editCity"
         android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText2"
-        android:layout_below="@+id/editText"
-        android:layout_alignStart="@+id/editText"
+        android:id="@+id/editCity"
+        android:layout_below="@+id/editTrip"
+        android:layout_alignStart="@+id/editTrip"
         android:singleLine="true"
         android:hint="Where are you going?" />
 
@@ -55,7 +55,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText2"
+        android:layout_below="@+id/editCity"
         android:layout_alignParentStart="true"
         android:layout_marginTop="10dp"
         android:id="@+id/linearLayout">
