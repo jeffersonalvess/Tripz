@@ -64,42 +64,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_TRIP = "CREATE TABLE "
             + TABLE_TRIP + " ("
-            + KEY_ID + " INTEGER PRIMARY KEY,"
-            + KEY_NAME + " TEXT,"
-            + KEY_START_DATE + " INTEGER,"
-            + KEY_END_DATE + " INTEGER"
+            + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + KEY_NAME + " TEXT"
+            //+ KEY_START_DATE + " INTEGER,"
+            //+ KEY_END_DATE + " INTEGER"
             + ")";
 
     //CITY table create statement
 
     private static final String CREATE_TABLE_CITY = "CREATE TABLE "
             + TABLE_CITY + " ("
-            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + KEY_ID_TRIP + " INTEGER,"
             + KEY_NAME + " TEXT,"
-            + KEY_START_DATE + " INTEGER,"
-            + KEY_END_DATE + " INTEGER"
+            + KEY_START_DATE + " TEXT,"
+            + KEY_END_DATE + " TEXT"
             + ")";
 
     //DAY table create statement
 
     private static final String CREATE_TABLE_DAY = "CREATE TABLE "
             + TABLE_DAY + " ("
-            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + KEY_ID_CITY + " INTEGER,"
             + KEY_INDEX + " INTEGER,"
-            + KEY_DATE + " INTEGER"
+            + KEY_DATE + " TEXT"
             + ")";
 
     //PLACE table create statement
 
     private static final String CREATE_TABLE_OURPLACE = "CREATE TABLE "
             + TABLE_OURPLACE + " ("
-            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + KEY_ID_DAY + " INTEGER,"
             + KEY_NAME + " TEXT,"
             + KEY_DESCRIPTION + " TEXT,"
-            + KEY_OPEN_HOURS + " INTEGER,"
+            + KEY_OPEN_HOURS + " TEXT,"
             + KEY_ADDRESS + " TEXT,"
             + KEY_VISITED + " INTEGER"
             + ")";
@@ -110,12 +110,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
         // creating required tables
         db.execSQL(CREATE_TABLE_TRIP);
         db.execSQL(CREATE_TABLE_CITY);
-        db.execSQL(CREATE_TABLE_DAY);
-        db.execSQL(CREATE_TABLE_OURPLACE);
+        //db.execSQL(CREATE_TABLE_DAY);
+        //db.execSQL(CREATE_TABLE_OURPLACE);
 
     }
 
@@ -124,8 +123,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // drop older tables
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRIP);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CITY);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DAY);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_OURPLACE);
+        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_DAY);
+        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_OURPLACE);
 
         //create new ones
 
@@ -139,12 +138,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        //values.put(KEY_ID,);
+        //values.put(KEY_ID, -1);
         values.put(KEY_NAME, trip.getName());
-        values.put(KEY_START_DATE, trip.getStartDate());
-        values.put(KEY_END_DATE, trip.getEndDate());
+        //values.put(KEY_START_DATE, trip.getStartDate());
+        //values.put(KEY_END_DATE, trip.getEndDate());
 
         long trip_id = db.insert(TABLE_TRIP, null, values);
+        System.out.println(trip_id);
 
         return trip_id;
     }
@@ -164,7 +164,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         {
             do {
                 Trip aux = new Trip();
-                //aux.setId(c.getInt((c.getColumnIndex(KEY_ID)) ) );
+                aux.setId(c.getInt((c.getColumnIndex(KEY_ID)) ) );
                 aux.setName(c.getString(c.getColumnIndex(KEY_NAME)));
                 //aux.setStartDate(c.getInt(c.getColumnIndex(KEY_START_DATE)));
                 //aux.setEndDate(c.getInt(c.getColumnIndex(KEY_END_DATE)));
@@ -181,10 +181,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        //values.put(KEY_ID,);
         values.put(KEY_NAME, trip.getName());
-        values.put(KEY_START_DATE, trip.getStartDate());
-        values.put(KEY_END_DATE, trip.getEndDate());
+        //values.put(KEY_START_DATE, trip.getStartDate());
+        //values.put(KEY_END_DATE, trip.getEndDate());
 
         //updating
 
@@ -199,17 +198,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(trip_id)});
     }
 
+
+
+
     //---------------- CITY ------------------------------------------------------------------------
-    public long createDay (City city)
+    public long createCity (City city)
     {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_ID, city.getId());
+        //values.put(KEY_ID, city.getId());
         values.put(KEY_ID_TRIP, city.getIdTrip());
         values.put(KEY_NAME, city.getName());
-        //values.put(KEY_START_DATE, city.getStart());
-        //values.put(KEY_END_DATE, city.getEnd());
+        values.put(KEY_START_DATE, city.getStartString());
+        values.put(KEY_END_DATE, city.getEndString());
 
         long city_id = db.insert(TABLE_CITY, null, values);
 
@@ -232,10 +234,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             do {
                 City aux = new City();
                 //aux.setId(c.getInt((c.getColumnIndex(KEY_ID)) ) );
-                //aux.setIdTrip(c.getInt(c.getColumnIndex(KEY_ID_TRIP)) );
+                aux.setIdTrip(c.getInt(c.getColumnIndex(KEY_ID_TRIP)) );
                 aux.setName(c.getString(c.getColumnIndex(KEY_NAME)));
-                //aux.setStart(c.getInt(c.getColumnIndex(KEY_START_DATE));
-                //aux.setEnd(c.getInt(c.getColumnIndex(KEY_END_DATE)));
+                //aux.setStart(c.getString(c.getColumnIndex(KEY_START_DATE)));
+                //aux.setEnd(c.getString(c.getColumnIndex(KEY_END_DATE)));
 
                 cities.add(aux);
             }while(c.moveToNext());
@@ -249,11 +251,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        //values.put(KEY_ID,);
-        //values.put(KEY_ID_TRIP,);
+        values.put(KEY_ID_TRIP, city.getIdTrip());
         values.put(KEY_NAME, city.getName());
-        //values.put(KEY_START_DATE, city.getStart());
-        //values.put(KEY_END_DATE, city.getEnd());
+        values.put(KEY_START_DATE, city.getStartString());
+        values.put(KEY_END_DATE, city.getEndString());
 
         //updating
 
@@ -408,5 +409,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_OURPLACE, KEY_ID + " = ?",
                 new String[] {String.valueOf(place_id)});
+    }
+
+
+    public void closeDB(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        if(db != null && db.isOpen())
+            db.close();
     }
 }

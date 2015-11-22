@@ -25,8 +25,9 @@ public class City {
 
     public City() {}
 
-    public City(String name, OurDate start, OurDate end){
+    public City(Integer idTrip, String name, OurDate start, OurDate end){
         this.name = name;
+        this.id_trip = idTrip;
         this.start = start;
         this.end = end;
         list_day = new ArrayList<Day>();

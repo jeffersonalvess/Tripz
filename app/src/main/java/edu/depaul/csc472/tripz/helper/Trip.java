@@ -19,6 +19,11 @@ public class Trip {
         this.name = name;
         city_list = new ArrayList<City>();
     }
+    public Trip(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+        city_list = new ArrayList<City>();
+    }
 
     public Trip(){};
 

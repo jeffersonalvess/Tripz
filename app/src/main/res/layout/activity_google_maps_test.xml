@@ -71,4 +71,13 @@
         android:text="Trips and Cities"
         android:layout_alignParentBottom="true"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Teste Banco"
+        android:id="@+id/button"
+        android:layout_alignBaseline="@+id/bt1"
+        android:layout_alignBottom="@+id/bt1"
+        android:layout_alignEnd="@+id/acCity" />
+
 </RelativeLayout>

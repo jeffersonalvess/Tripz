@@ -170,6 +170,16 @@ public class GoogleMapsTest extends AppCompatActivity implements
                 startActivity(intent);
             }
         });
+
+        Button teste_banco = (Button) findViewById(R.id.button);
+
+        teste_banco.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GoogleMapsTest.this, TesteBanco.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void onPickButtonClick(View v) {
@@ -194,7 +204,7 @@ public class GoogleMapsTest extends AppCompatActivity implements
                                     int resultCode, Intent data) {
 
 
-            System.out.println("RENATOBR1" + resultCode);
+            //System.out.println("RENATOBR1" + resultCode);
 
         if (requestCode == REQUEST_PLACE_PICKER
                 && resultCode == Activity.RESULT_OK) {
