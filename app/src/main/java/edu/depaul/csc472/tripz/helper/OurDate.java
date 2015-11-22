@@ -69,14 +69,7 @@ public class OurDate extends Date{
         return elapsedDays;
     }
 
-    public static Date stringToDate(String s){
-        Date ret = null;
-        try {
-            ret = curFormater.parse(s);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        return ret;
+    public static OurDate stringToDate(String s){
+        return new OurDate(s);
     }
 }
