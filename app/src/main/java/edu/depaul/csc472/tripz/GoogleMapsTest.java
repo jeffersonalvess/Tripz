@@ -113,15 +113,16 @@ public class GoogleMapsTest extends AppCompatActivity implements
 
 
         tvSearch = (AutoCompleteTextView) findViewById(R.id.acCity);
+        tvLocal = (AutoCompleteTextView) findViewById(R.id.acLocals);
 
         tvSearch.setThreshold(3);
+        tvLocal.setThreshold(3);
 
         tvName = (TextView) findViewById(R.id.name);
         tvAddress = (TextView) findViewById(R.id.address);
         tvLatLong = (TextView) findViewById(R.id.latlong);
         tvAtt = (TextView) findViewById(R.id.att);
 
-        tvLocal = (AutoCompleteTextView) findViewById(R.id.acLocals);
         tvName2 = (TextView) findViewById(R.id.name2);
         tvAddress2 = (TextView) findViewById(R.id.address2);
         tvLatLong2 = (TextView) findViewById(R.id.latlong2);
@@ -130,7 +131,7 @@ public class GoogleMapsTest extends AppCompatActivity implements
         tvAtt2 = (TextView) findViewById(R.id.att2);
 
         tvSearch.setOnItemClickListener(mAutocompleteClickListener);
-        tvLocal.setOnItemClickListener(mAutocompleteClickListener);
+        tvLocal.setOnItemClickListener(mAutocompleteClickListener2);
 
         ArrayList<Integer> filterTypes = new ArrayList<Integer>();
         filterTypes.add(Place.TYPE_LOCALITY);
@@ -138,7 +139,6 @@ public class GoogleMapsTest extends AppCompatActivity implements
 //        filterTypes.add(Place.TYPE_GEOCODE);
 
         filterTypes2 = new ArrayList<Integer>();
-
         filterTypes2.add(Place.TYPE_ESTABLISHMENT);
 
         mPlaceArrayAdapter = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
@@ -320,6 +320,20 @@ public class GoogleMapsTest extends AppCompatActivity implements
         }
     };
 
+    private AdapterView.OnItemClickListener mAutocompleteClickListener2
+            = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            final PlaceArrayAdapter.PlaceAutocomplete item = mPlaceArrayAdapter2.getItem(position);
+            final String placeId = String.valueOf(item.placeId);
+            Log.i(LOG_TAG, "Selected: " + item.description);
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+                    .getPlaceById(mGoogleApiClient, placeId);
+            placeResult.setResultCallback(mUpdatePlaceDetailsCallback2);
+            Log.i(LOG_TAG, "Fetching details for ID: " + item.placeId);
+        }
+    };
+
     private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
             = new ResultCallback<PlaceBuffer>() {
         @Override
@@ -349,6 +363,33 @@ public class GoogleMapsTest extends AppCompatActivity implements
 
             if (attributions != null) {
                 tvAtt.setText(Html.fromHtml(attributions.toString()));
+            }
+        }
+    };
+
+    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback2
+            = new ResultCallback<PlaceBuffer>() {
+        @Override
+        public void onResult(PlaceBuffer places) {
+            if (!places.getStatus().isSuccess()) {
+                Log.e(LOG_TAG, "Place query did not complete. Error: " +
+                        places.getStatus().toString());
+                return;
+            }
+            // Selecting the first object buffer.
+            final Place place = places.get(0);
+            CharSequence attributions = places.getAttributions();
+
+            tvName2.setText(Html.fromHtml(place.getName() + ""));
+            tvAddress2.setText(Html.fromHtml(place.getAddress() + ""));
+            tvPhone.setText(Html.fromHtml(place.getPhoneNumber() + ""));
+            tvWebPage.setText(place.getWebsiteUri() + "");
+            tvLatLong2.setText(Html.fromHtml(place.getLatLng().toString() + ""));
+
+            mPlaceArrayAdapter2.setmBounds(BOUNDS);
+
+            if (attributions != null) {
+                tvAtt2.setText(Html.fromHtml(attributions.toString()));
             }
         }
     };
