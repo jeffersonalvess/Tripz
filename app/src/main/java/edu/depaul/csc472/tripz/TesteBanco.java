@@ -8,12 +8,15 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
+import com.google.android.gms.location.places.Place;
+
 import java.util.ArrayList;
 
 import edu.depaul.csc472.tripz.helper.City;
 import edu.depaul.csc472.tripz.helper.DatabaseHelper;
 import edu.depaul.csc472.tripz.helper.Day;
 import edu.depaul.csc472.tripz.helper.OurDate;
+import edu.depaul.csc472.tripz.helper.OurPlace;
 import edu.depaul.csc472.tripz.helper.Trip;
 
 
@@ -85,7 +88,46 @@ public class TesteBanco extends AppCompatActivity {
         }
 
 
-        Day day1 = new Day(2, 1, new OurDate("2014/10/18"), );
+        Day day1 = new Day(2, 1, new OurDate("2014/10/18"));
+        Day day2 = new Day(3, 2, new OurDate("2014/10/18"));
+        Day day3 = new Day(4, 3, new OurDate("2014/10/18"));
+        Day day4 = new Day(2, 4, new OurDate("2014/10/18"));
+
+        long day1_id = db.createDay(day1);
+        long day2_id = db.createDay(day2);
+        long day3_id = db.createDay(day3);
+        long day4_id = db.createDay(day4);
+
+        Log.d("Days Count", "Days Count: " + db.getDays().size());
+
+        ArrayList<Day> allDays = db.getDays();
+
+        for(Day d1 : allDays)
+        {
+           Log.d("City: ", d1.getId()+" "+d1.getIdCity()+" "+d1.getIndex()+" "+d1.getDate());
+        }
+
+
+        OurPlace place1 = new OurPlace(1, "STARBUCKS", "MUITO BOM", "RUA DE CASA");
+        OurPlace place2 = new OurPlace(2, "OUTRO STARBUCKS", "BOM", "NA RUA DE TRAS");
+        OurPlace place3 = new OurPlace(3, "MAIS UM STARBUCKS", "OTIMO", "PERTO DO CDM");
+        OurPlace place4 = new OurPlace(4, "SEVEN ELEVEN", "VENDE PIZZA PRO PAULOBR", "AQUI DO LADO");
+
+        long place1_id = db.createPlace(place1);
+        long place2_id = db.createPlace(place2);
+        long place3_id = db.createPlace(place3);
+        long place4_id = db.createPlace(place4);
+
+        Log.d("Places Count", "Places Count: " + db.getPlaces().size());
+
+        ArrayList<OurPlace> allPlaces = db.getPlaces();
+
+        for(OurPlace p1 : allPlaces)
+        {
+            Log.d("Place: ", p1.getId()+" "+p1.getIdDay()+" "+p1.getName()+" "+p1.getDescription()+" "+p1.getAddress()+" "+p1.getVisited() );
+        }
+
+
 
         db.closeDB();
     }

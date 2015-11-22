@@ -19,12 +19,19 @@ public class Day /*extends Date*/{
         list_place = new ArrayList<OurPlace>();
     }
 
-    public Day(){};
+    public Day(){}
 
-    public Day(Integer index, OurDate date, ArrayList<OurPlace> list_place){
+    public Day(Integer idCity, Integer index, OurDate date, ArrayList<OurPlace> list_place){
         this.index = index;
+        this.id_city = idCity;
         this.date = date;
         this.list_place = list_place;
+    }
+
+    public Day(Integer idCity, Integer index, OurDate date){
+        this.index = index;
+        this.id_city = idCity;
+        this.date = date;
     }
 
     public void setId(Integer id){ this.id = id;}

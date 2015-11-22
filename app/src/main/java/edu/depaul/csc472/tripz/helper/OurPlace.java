@@ -20,6 +20,14 @@ public class OurPlace {
 
     public OurPlace(){}
 
+    public OurPlace(Integer idDay, String name, String desc, String ad){
+        this.id_day = idDay;
+        this.name = name;
+        this.description = desc;
+        this.address = ad;
+        this.visited = 0;
+    }
+
     public void setId(Integer id){ this.id = id;}
 
     public Integer getId(){ return this.id; }

@@ -47,7 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // DAY Table - column names
 
     private static final String KEY_ID_CITY = "id_city";
-    private static final String KEY_INDEX = "index";
+    private static final String KEY_INDEX = "indexi";
     private static final String KEY_DATE = "date";
 
     //PLACE Table - columns names
@@ -113,8 +113,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // creating required tables
         db.execSQL(CREATE_TABLE_TRIP);
         db.execSQL(CREATE_TABLE_CITY);
-        //db.execSQL(CREATE_TABLE_DAY);
-        //db.execSQL(CREATE_TABLE_OURPLACE);
+        db.execSQL(CREATE_TABLE_DAY);
+        db.execSQL(CREATE_TABLE_OURPLACE);
 
     }
 
@@ -123,8 +123,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // drop older tables
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRIP);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CITY);
-        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_DAY);
-        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_OURPLACE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DAY);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_OURPLACE);
 
         //create new ones
 
@@ -281,7 +281,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //values.put(KEY_ID,);
         values.put(KEY_ID_CITY, day.getIdCity());
         values.put(KEY_INDEX, day.getIndex());
-        //values.put(KEY_DATE, day.getDate());
+        values.put(KEY_DATE, day.getDateString());
 
         long day_id = db.insert(TABLE_DAY, null, values);
 
@@ -303,10 +303,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         {
             do {
                 Day aux = new Day();
-                //aux.setId(c.getInt((c.getColumnIndex(KEY_ID)) ) );
-                //aux.setIdCity(c.getInt((c.getColumnIndex(KEY_ID_CITY)) ) );
+                aux.setId(c.getInt((c.getColumnIndex(KEY_ID)) ) );
+                aux.setIdCity(c.getInt((c.getColumnIndex(KEY_ID_CITY))));
                 aux.setIndex(c.getInt(c.getColumnIndex(KEY_INDEX)));
-                //aux.setDate(c.getInt(c.getColumnIndex(KEY_DATE)));
+                aux.setDate(OurDate.stringToDate(c.getString(c.getColumnIndex(KEY_DATE))));
 
                 days.add(aux);
             }while(c.moveToNext());
@@ -321,9 +321,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         //values.put(KEY_ID,);
-        //values.put(KEY_ID_CITY,);
+        values.put(KEY_ID_CITY, day.getIdCity());
         values.put(KEY_INDEX, day.getIndex());
-        //values.put(KEY_DATE, day.getDate());
+        values.put(KEY_DATE, day.getDateString());
 
         //updating
 
@@ -346,7 +346,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         //values.put(KEY_ID,);
-        //values.put(KEY_ID_DAY,);
+        values.put(KEY_ID_DAY, place.getIdDay());
         values.put(KEY_NAME, place.getName());
         values.put(KEY_DESCRIPTION, place.getDescription());
         //values.put(KEY_OPEN_HOURS, place.getOpen_hours());
@@ -373,12 +373,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         {
             do {
                 OurPlace aux = new OurPlace();
-                //aux.setId(c.getInt((c.getColumnIndex(KEY_ID)) ) );
-                //aux.setIdDay(c.getInt((c.getColumnIndex(KEY_ID_DAY)) ) );
+                aux.setId(c.getInt((c.getColumnIndex(KEY_ID)) ) );
+                aux.setIdDay(c.getInt((c.getColumnIndex(KEY_ID_DAY)) ) );
                 aux.setName(c.getString(c.getColumnIndex(KEY_NAME)));
                 aux.setDescription(c.getString(c.getColumnIndex(KEY_DESCRIPTION)));
                 //aux.setOpen_hours(c.getInt(c.getColumnIndex(KEY_OPEN_HOURS)));
-                aux.setName(c.getString(c.getColumnIndex(KEY_ADDRESS)));
+                aux.setAddress(c.getString(c.getColumnIndex(KEY_ADDRESS)));
                 aux.setVisited(c.getInt(c.getColumnIndex(KEY_VISITED)));
 
                 places.add(aux);
@@ -394,7 +394,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         //values.put(KEY_ID,);
-        //values.put(KEY_ID_DAY,);
+        values.put(KEY_ID_DAY, place.getIdDay());
         values.put(KEY_NAME, place.getName());
         values.put(KEY_DESCRIPTION, place.getDescription());
         //values.put(KEY_OPEN_HOURS, place.getOpen_hours());
