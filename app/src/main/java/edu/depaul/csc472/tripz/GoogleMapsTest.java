@@ -2,17 +2,13 @@ package edu.depaul.csc472.tripz;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.location.Location;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.Html;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
@@ -28,11 +24,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
-import com.google.android.gms.location.places.PlaceFilter;
-import com.google.android.gms.location.places.PlaceLikelihood;
 import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
@@ -40,10 +33,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import edu.depaul.csc472.tripz.helper.OurDate;
 
 public class GoogleMapsTest extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
@@ -66,36 +55,18 @@ public class GoogleMapsTest extends AppCompatActivity implements
     private TextView tvAddress;
     private TextView tvLatLong;
     private TextView tvAtt;
-    private TextView tvName2;
-    private TextView tvAddress2;
-    private TextView tvLatLong2;
-    private TextView tvPhone;
-    private TextView tvWebPage;
-    private TextView tvAtt2;
     private AutoCompleteTextView tvSearch;
-    private AutoCompleteTextView tvLocal;
-
-    private ArrayList<Integer> filterTypes2;
 
     private GoogleApiClient mGoogleApiClient;
     private PlaceArrayAdapter mPlaceArrayAdapter;
-    private PlaceArrayAdapter mPlaceArrayAdapter2;
     private static LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
             new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
-    private static LatLngBounds BOUNDS = new LatLngBounds(
-            new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
-//    private static final LatLngBounds ALL_THE_WORLD = new LatLngBounds(
-//            new LatLng(85, -180), new LatLng(-85, 180));
 
-    //private GoogleApiClient client;
+    double lat;
+    double lng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        OurDate date = new OurDate("2015/11/22");
-
-        Log.i("TESTE_DATA: ", date.toString());
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_google_maps_test);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -113,43 +84,26 @@ public class GoogleMapsTest extends AppCompatActivity implements
 
 
         tvSearch = (AutoCompleteTextView) findViewById(R.id.acCity);
-        tvLocal = (AutoCompleteTextView) findViewById(R.id.acLocals);
 
         tvSearch.setThreshold(3);
-        tvLocal.setThreshold(3);
 
         tvName = (TextView) findViewById(R.id.name);
         tvAddress = (TextView) findViewById(R.id.address);
         tvLatLong = (TextView) findViewById(R.id.latlong);
         tvAtt = (TextView) findViewById(R.id.att);
 
-        tvName2 = (TextView) findViewById(R.id.name2);
-        tvAddress2 = (TextView) findViewById(R.id.address2);
-        tvLatLong2 = (TextView) findViewById(R.id.latlong2);
-        tvPhone = (TextView) findViewById(R.id.phone);
-        tvWebPage = (TextView) findViewById(R.id.webpage);
-        tvAtt2 = (TextView) findViewById(R.id.att2);
-
         tvSearch.setOnItemClickListener(mAutocompleteClickListener);
-        tvLocal.setOnItemClickListener(mAutocompleteClickListener2);
 
         ArrayList<Integer> filterTypes = new ArrayList<Integer>();
         filterTypes.add(Place.TYPE_LOCALITY);
         filterTypes.add(Place.TYPE_ADMINISTRATIVE_AREA_LEVEL_3);
 //        filterTypes.add(Place.TYPE_GEOCODE);
 
-        filterTypes2 = new ArrayList<Integer>();
-        filterTypes2.add(Place.TYPE_ESTABLISHMENT);
-
         mPlaceArrayAdapter = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
                 BOUNDS_MOUNTAIN_VIEW, filterTypes);
                 //BOUNDS_MOUNTAIN_VIEW, filter);
 
-        mPlaceArrayAdapter2 = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
-                BOUNDS, filterTypes2);
-
         tvSearch.setAdapter(mPlaceArrayAdapter);
-        tvLocal.setAdapter(mPlaceArrayAdapter2);
 
 
 
@@ -201,7 +155,7 @@ public class GoogleMapsTest extends AppCompatActivity implements
 
 
 
-        // ***** Test Button **********************************************************************
+        // ***** Test Buttons *********************************************************************
         Button trips_and_cities = (Button) findViewById(R.id.bt1);
 
         trips_and_cities.setOnClickListener(new View.OnClickListener() {
@@ -218,6 +172,22 @@ public class GoogleMapsTest extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(GoogleMapsTest.this, TesteBanco.class);
+                startActivity(intent);
+            }
+        });
+
+        Button teste_places = (Button) findViewById(R.id.bt2);
+
+        teste_places.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GoogleMapsTest.this, TestePlaces.class);
+
+                intent.putExtra("LAT", lat);
+                intent.putExtra("LNG", lng);
+
+                Log.i("TESTE BT", "BLZ");
+
                 startActivity(intent);
             }
         });
@@ -243,10 +213,6 @@ public class GoogleMapsTest extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode,
                                     int resultCode, Intent data) {
-
-
-            //System.out.println("RENATOBR1" + resultCode);
-
         if (requestCode == REQUEST_PLACE_PICKER
                 && resultCode == Activity.RESULT_OK) {
 
@@ -320,20 +286,6 @@ public class GoogleMapsTest extends AppCompatActivity implements
         }
     };
 
-    private AdapterView.OnItemClickListener mAutocompleteClickListener2
-            = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            final PlaceArrayAdapter.PlaceAutocomplete item = mPlaceArrayAdapter2.getItem(position);
-            final String placeId = String.valueOf(item.placeId);
-            Log.i(LOG_TAG, "Selected: " + item.description);
-            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
-                    .getPlaceById(mGoogleApiClient, placeId);
-            placeResult.setResultCallback(mUpdatePlaceDetailsCallback2);
-            Log.i(LOG_TAG, "Fetching details for ID: " + item.placeId);
-        }
-    };
-
     private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
             = new ResultCallback<PlaceBuffer>() {
         @Override
@@ -349,47 +301,13 @@ public class GoogleMapsTest extends AppCompatActivity implements
 
             tvName.setText(Html.fromHtml(place.getName() + ""));
             tvAddress.setText(Html.fromHtml(place.getAddress() + ""));
-//            mIdTextView.setText(Html.fromHtml(place.getId() + ""));
-//            mPhoneTextView.setText(Html.fromHtml(place.getPhoneNumber() + ""));
-//            mWebTextView.setText(place.getWebsiteUri() + "");
             tvLatLong.setText(Html.fromHtml(place.getLatLng().toString() + ""));
 
-            double lat = place.getLatLng().latitude;
-            double lng = place.getLatLng().longitude;
-
-            BOUNDS = new LatLngBounds(new LatLng(lat-0.5, lng-0.5), new LatLng(lat+0.5, lng+0.5));
-
-            mPlaceArrayAdapter2.setmBounds(BOUNDS);
+            lat = place.getLatLng().latitude;
+            lng = place.getLatLng().longitude;
 
             if (attributions != null) {
                 tvAtt.setText(Html.fromHtml(attributions.toString()));
-            }
-        }
-    };
-
-    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback2
-            = new ResultCallback<PlaceBuffer>() {
-        @Override
-        public void onResult(PlaceBuffer places) {
-            if (!places.getStatus().isSuccess()) {
-                Log.e(LOG_TAG, "Place query did not complete. Error: " +
-                        places.getStatus().toString());
-                return;
-            }
-            // Selecting the first object buffer.
-            final Place place = places.get(0);
-            CharSequence attributions = places.getAttributions();
-
-            tvName2.setText(Html.fromHtml(place.getName() + ""));
-            tvAddress2.setText(Html.fromHtml(place.getAddress() + ""));
-            tvPhone.setText(Html.fromHtml(place.getPhoneNumber() + ""));
-            tvWebPage.setText(place.getWebsiteUri() + "");
-            tvLatLong2.setText(Html.fromHtml(place.getLatLng().toString() + ""));
-
-            mPlaceArrayAdapter2.setmBounds(BOUNDS);
-
-            if (attributions != null) {
-                tvAtt2.setText(Html.fromHtml(attributions.toString()));
             }
         }
     };
@@ -398,14 +316,6 @@ public class GoogleMapsTest extends AppCompatActivity implements
     public void onConnected(Bundle bundle) {
         mPlaceArrayAdapter.setGoogleApiClient(mGoogleApiClient);
         Log.i(LOG_TAG, "Google Places API connected.");
-
-//        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-//                mGoogleApiClient);
-//        if (mLastLocation != null) {
-//            Log.i(LOCATION_TAG, String.valueOf(mLastLocation.getLatitude()));
-//        }
-
-
     }
 
     @Override

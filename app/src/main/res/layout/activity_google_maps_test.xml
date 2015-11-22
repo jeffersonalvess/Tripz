@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:hint="Enter Place Here for Search"
+        android:hint="Enter City Here for Search"
         android:textSize="20dp"/>
 
     <TextView
@@ -45,63 +45,12 @@
         android:textSize="20sp"
         android:layout_below="@id/latlong"/>
 
-    <AutoCompleteTextView
-        android:id="@+id/acLocals"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:hint="Enter Place Here for Search"
-        android:textSize="20dp"
-        android:layout_below="@id/latlong"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/name2"
-        android:textSize="20sp"
-        android:layout_below="@+id/acLocals"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/address2"
-        android:textSize="20sp"
-        android:layout_below="@id/name2"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/latlong2"
-        android:textSize="20sp"
-        android:layout_below="@id/address2"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/phone"
-        android:textSize="20sp"
-        android:layout_below="@id/latlong2"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/webpage"
-        android:textSize="20sp"
-        android:layout_below="@id/phone"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/att2"
-        android:textSize="20sp"
-        android:layout_below="@id/webpage"/>
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/busca"
         android:text="teste busca"
-        android:layout_above="@+id/bt1"/>
+        android:layout_above="@+id/bt2"/>
 
     <ImageView
         android:id="@+id/image"
@@ -121,6 +70,13 @@
         android:id="@+id/bt1"
         android:text="Trips and Cities"
         android:layout_alignParentBottom="true"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bt2"
+        android:text="Locals by City"
+        android:layout_above="@id/bt1"/>
 
     <Button
         android:layout_width="wrap_content"
