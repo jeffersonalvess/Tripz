@@ -46,7 +46,7 @@ public class CitiesActivity extends AppCompatActivity {
         ImageView imgTrip = (ImageView) findViewById(R.id.imageView);
 
         txtTitle.setText(t.getName());
-        txtLine1.setText(t.getStartDate().toString() + " - " + t.getEndDate().toString());
+        txtLine1.setText(t.getStart().getAmericanDate() + " - " + t.getEnd().getAmericanDate());
         txtLine2.setVisibility(View.INVISIBLE);
         imgTrip.setImageResource(android.R.drawable.ic_dialog_map);
 
