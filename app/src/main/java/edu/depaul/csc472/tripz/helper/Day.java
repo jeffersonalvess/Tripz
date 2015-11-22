@@ -13,7 +13,6 @@ public class Day /*extends Date*/{
     OurDate date;
     private ArrayList<OurPlace> list_place;
 
-
     public Day(Integer index, OurDate date){
         this.index = index;
         this.date = date;
