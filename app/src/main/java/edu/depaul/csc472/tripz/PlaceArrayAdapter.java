@@ -54,7 +54,7 @@ public class PlaceArrayAdapter
         ArrayList<Integer> filterTypes = new ArrayList<Integer>();
 
         for(int i = 0; i < filter.size(); i++){
-            if(filter.get(i) == Place.TYPE_GEOCODE || filter.get(i) == Place.TYPE_ESTABLISHMENT){
+            if(filter.get(i).equals(Place.TYPE_GEOCODE) || filter.get(i).equals(Place.TYPE_ESTABLISHMENT)){
                 filterTypes.add(filter.get(i));
             }
         }
@@ -99,6 +99,7 @@ public class PlaceArrayAdapter
             AutocompletePredictionBuffer autocompletePredictions = results
                     .await(60, TimeUnit.SECONDS);
             final Status status = autocompletePredictions.getStatus();
+
             if (!status.isSuccess()) {
                 Toast.makeText(getContext(), "Error: " + status.toString(),
                         Toast.LENGTH_SHORT).show();

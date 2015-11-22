@@ -138,7 +138,8 @@ public class GoogleMapsTest extends AppCompatActivity implements
 //        filterTypes.add(Place.TYPE_GEOCODE);
 
         filterTypes2 = new ArrayList<Integer>();
-        filterTypes.add(Place.TYPE_ESTABLISHMENT);
+
+        filterTypes2.add(Place.TYPE_ESTABLISHMENT);
 
         mPlaceArrayAdapter = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
                 BOUNDS_MOUNTAIN_VIEW, filterTypes);
