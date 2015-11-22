@@ -53,6 +53,8 @@ public class Day /*extends Date*/{
 
     public Date getDate(){return date;}
 
+    public String getDateString(){return date.toString();}
+
     public void setDate(){this.date = date;}
 
     public ArrayList<OurPlace> getList_place(){return list_place;}

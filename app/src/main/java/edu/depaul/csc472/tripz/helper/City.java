@@ -12,13 +12,12 @@ public class City {
     private Integer id_trip;
     private String name;
     private ArrayList<Day> list_day;
-    private Date start;
-    private Date end;
+    private OurDate start;
+    private OurDate end;
 
     // Atributo de formatação de datas
     // *** obs: Qualquer dúvida a respeito da classe Date me consultar,
     // ***      pois é uma bosta trabalhar com essa maldita classe. :/
-    public static SimpleDateFormat curFormater = new SimpleDateFormat("dd/MM/yyyy");
 
     public City(String name){
         this.name = name;
@@ -26,20 +25,20 @@ public class City {
 
     public City() {}
 
-    public City(String name, Date start, Date end){
+    public City(String name, OurDate start, OurDate end){
         this.name = name;
         this.start = start;
         this.end = end;
         list_day = new ArrayList<Day>();
 
-        long dif = duration();
+        long dif = start.duration(end);
 
 //        Teste de formatação das datas
 //        System.out.println("Dia " + WelcomeScreen.curFormater.format(start) + " ao dia "
 //                + WelcomeScreen.curFormater.format(end));
 
         for(int i = 0; i <= dif; i++) {
-            list_day.add(new Day(i + 1, addDaysOnDate(start, i)));
+            list_day.add(new Day(i + 1, start.addDaysOnDate(i)));
 
 //            Teste de formatação das datas
 //            Date d = addDaysOnDate(start, i);
@@ -72,50 +71,15 @@ public class City {
 
     public void setName(String name){this.name = name;}
 
-    public Date getStart(){return start;}
+    public OurDate getStart(){return start;}
 
-    public void setStart(Date start){this.start = start;}
+    public String getStartString(){return start.toString();}
+
+    public void setStart(OurDate start){this.start = start;}
 
     public Date getEnd(){return end;}
 
-    public void setEnd(Date end){this.end = end;}
+    public String getEndString(){return end.toString();}
 
-    public long duration(){
-
-        //milliseconds
-        long different = end.getTime() - start.getTime();
-
-//        System.out.println("startDate : " + startDate);
-//        System.out.println("endDate : "+ endDate);
-//        System.out.println("different : " + different);
-
-        long secondsInMilli = 1000;
-        long minutesInMilli = secondsInMilli * 60;
-        long hoursInMilli = minutesInMilli * 60;
-        long daysInMilli = hoursInMilli * 24;
-
-        long elapsedDays = different / daysInMilli;
-//        different = different % daysInMilli;
-
-//        long elapsedHours = different / hoursInMilli;
-//        different = different % hoursInMilli;
-//
-//        long elapsedMinutes = different / minutesInMilli;
-//        different = different % minutesInMilli;
-//
-//        long elapsedSeconds = different / secondsInMilli;
-
-//        System.out.printf(
-//                "%d days, %d hours, %d minutes, %d seconds%n",
-//                elapsedDays,
-//                elapsedHours, elapsedMinutes, elapsedSeconds);
-
-        return elapsedDays;
-    }
-
-    private Date addDaysOnDate(Date date, int days){
-        long daysInMilli = 1000 * 60 * 60 * 24 * days;
-
-        return new Date(date.getTime() + daysInMilli);
-    }
+    public void setEnd(OurDate end){this.end = end;}
 }

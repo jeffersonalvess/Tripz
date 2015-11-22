@@ -52,8 +52,8 @@ public class WelcomeScreen extends AppCompatActivity {
 
         if (settings.getBoolean("loginSucessful", false)) {
             Intent intent = new Intent();
-            intent.setClass(WelcomeScreen.this, MainActivity.class);
-            //intent.setClass(WelcomeScreen.this, GoogleMapsTest.class);
+            //intent.setClass(WelcomeScreen.this, MainActivity.class);
+            intent.setClass(WelcomeScreen.this, GoogleMapsTest.class);
             startActivity(intent);
             finish();
         }

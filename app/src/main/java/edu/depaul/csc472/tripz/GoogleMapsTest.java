@@ -43,6 +43,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import edu.depaul.csc472.tripz.helper.OurDate;
+
 public class GoogleMapsTest extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks{
@@ -76,6 +78,10 @@ public class GoogleMapsTest extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        OurDate date = new OurDate("2015/11/22");
+
+        Log.i("TESTE_DATA: ", date.toString());
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_google_maps_test);
@@ -115,9 +121,9 @@ public class GoogleMapsTest extends AppCompatActivity implements
         tvSearch.setOnItemClickListener(mAutocompleteClickListener);
 
         ArrayList<Integer> filterTypes = new ArrayList<Integer>();
-//        filterTypes.add(Place.TYPE_LOCALITY);
-//        filterTypes.add(Place.TYPE_ADMINISTRATIVE_AREA_LEVEL_3);
-        filterTypes.add(Place.TYPE_GEOCODE);
+        filterTypes.add(Place.TYPE_LOCALITY);
+        filterTypes.add(Place.TYPE_ADMINISTRATIVE_AREA_LEVEL_3);
+//        filterTypes.add(Place.TYPE_GEOCODE);
 
 //        AutocompleteFilter filter = null;
 //        filter = AutocompleteFilter.create(filterTypes);
