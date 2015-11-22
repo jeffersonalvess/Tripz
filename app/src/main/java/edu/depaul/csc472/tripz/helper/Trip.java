@@ -1,12 +1,15 @@
-package edu.depaul.csc472.tripz;
+package edu.depaul.csc472.tripz.helper;
 
 import java.util.ArrayList;
+
+import edu.depaul.csc472.tripz.helper.City;
 
 /**
  * Created by Miller on 19/11/2015.
  */
 
 public class Trip {
+    private Integer id;
     private String name;
     private String startDate;
     private String endDate;
@@ -17,10 +20,16 @@ public class Trip {
         city_list = new ArrayList<City>();
     }
 
+    public Trip(){};
+
     public Trip(String name, ArrayList<City> city_list) {
         this.name = name;
         this.city_list = city_list;
     }
+
+    public void setId(Integer id){this.id = id;}
+
+    public Integer getId(){return this.id;}
 
     public void addCity(City city) {
         city_list.add(city);

@@ -188,6 +188,9 @@ public class GoogleMapsTest extends AppCompatActivity implements
     protected void onActivityResult(int requestCode,
                                     int resultCode, Intent data) {
 
+
+            System.out.println("RENATOBR1" + resultCode);
+
         if (requestCode == REQUEST_PLACE_PICKER
                 && resultCode == Activity.RESULT_OK) {
 

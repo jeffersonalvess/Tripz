@@ -1,14 +1,15 @@
-package edu.depaul.csc472.tripz;
+package edu.depaul.csc472.tripz.helper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
  * Created by Miller on 19/11/2015.
  */
 public class City {
+    private Integer id;
+    private Integer id_trip;
     private String name;
     private ArrayList<Day> list_day;
     private Date start;
@@ -22,6 +23,8 @@ public class City {
     public City(String name){
         this.name = name;
     }
+
+    public City() {}
 
     public City(String name, Date start, Date end){
         this.name = name;
@@ -44,6 +47,14 @@ public class City {
 //            System.out.println("Dia " + (i+1) + ": " + WelcomeScreen.curFormater.format(d));
         }
     }
+
+    public void setId(Integer id){ this.id = id;}
+
+    public Integer getId(){ return this.id; }
+
+    public void setIdTrip(Integer id){ this.id_trip = id;}
+
+    public Integer getIdTrip(){ return this.id_trip;}
 
     public void addDay(Day day){
         list_day.add(day);

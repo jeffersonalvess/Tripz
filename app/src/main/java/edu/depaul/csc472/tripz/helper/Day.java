@@ -1,6 +1,4 @@
-package edu.depaul.csc472.tripz;
-
-import android.content.Intent;
+package edu.depaul.csc472.tripz.helper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,6 +7,8 @@ import java.util.Date;
  * Created by Miller on 19/11/2015.
  */
 public class Day /*extends Date*/{
+    private Integer id;
+    private Integer id_city;
     Integer index;
     Date date;
     private ArrayList<OurPlace> list_place;
@@ -19,11 +19,21 @@ public class Day /*extends Date*/{
         list_place = new ArrayList<OurPlace>();
     }
 
+    public Day(){};
+
     public Day(Integer index, Date date, ArrayList<OurPlace> list_place){
         this.index = index;
         this.date = date;
         this.list_place = list_place;
     }
+
+    public void setId(Integer id){ this.id = id;}
+
+    public Integer getId(){ return this.id; }
+
+    public void setIdCity(Integer id){ this.id_city = id;}
+
+    public Integer getIdCity(){ return this.id_city;}
 
     public void addOurPlace(OurPlace place){
         list_place.add(place);

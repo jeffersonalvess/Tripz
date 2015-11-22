@@ -2,6 +2,7 @@
     <string name="app_name">Tripz</string>
     <string name="action_settings">Settings</string>
     <string name="facebook_app_id">875749949211222</string>
+    <string name="google_api_key"> AIzaSyDZKBziz0XCJ9tIkyArB8kIlEzIFn8tGPs</string>
     <string name="title_activity_welcome_screen">WelcomeScreen</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_test">Test</string>
