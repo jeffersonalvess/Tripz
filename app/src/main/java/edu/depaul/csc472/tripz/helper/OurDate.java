@@ -1,5 +1,6 @@
 package edu.depaul.csc472.tripz.helper;
 
+import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -66,5 +67,16 @@ public class OurDate extends Date{
 //                elapsedHours, elapsedMinutes, elapsedSeconds);
 
         return elapsedDays;
+    }
+
+    public static Date stringToDate(String s){
+        Date ret = null;
+        try {
+            ret = curFormater.parse(s);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return ret;
     }
 }

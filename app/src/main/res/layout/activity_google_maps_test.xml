@@ -34,16 +34,67 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/att"
+        android:id="@+id/latlong"
         android:textSize="20sp"
         android:layout_below="@id/address"/>
 
-    <LinearLayout
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/att"
+        android:textSize="20sp"
+        android:layout_below="@id/latlong"/>
+
+    <AutoCompleteTextView
+        android:id="@+id/acLocals"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/att">
+        android:layout_margin="5dp"
+        android:hint="Enter Place Here for Search"
+        android:textSize="20dp"
+        android:layout_below="@id/latlong"/>
 
-    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/name2"
+        android:textSize="20sp"
+        android:layout_below="@+id/acLocals"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/address2"
+        android:textSize="20sp"
+        android:layout_below="@id/name2"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/latlong2"
+        android:textSize="20sp"
+        android:layout_below="@id/address2"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/phone"
+        android:textSize="20sp"
+        android:layout_below="@id/latlong2"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/webpage"
+        android:textSize="20sp"
+        android:layout_below="@id/phone"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/att2"
+        android:textSize="20sp"
+        android:layout_below="@id/webpage"/>
 
     <Button
         android:layout_width="wrap_content"

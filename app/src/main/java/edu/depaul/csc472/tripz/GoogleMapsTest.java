@@ -64,12 +64,25 @@ public class GoogleMapsTest extends AppCompatActivity implements
 
     private TextView tvName;
     private TextView tvAddress;
+    private TextView tvLatLong;
     private TextView tvAtt;
+    private TextView tvName2;
+    private TextView tvAddress2;
+    private TextView tvLatLong2;
+    private TextView tvPhone;
+    private TextView tvWebPage;
+    private TextView tvAtt2;
     private AutoCompleteTextView tvSearch;
+    private AutoCompleteTextView tvLocal;
+
+    private ArrayList<Integer> filterTypes2;
 
     private GoogleApiClient mGoogleApiClient;
     private PlaceArrayAdapter mPlaceArrayAdapter;
-    private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
+    private PlaceArrayAdapter mPlaceArrayAdapter2;
+    private static LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
+            new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
+    private static LatLngBounds BOUNDS = new LatLngBounds(
             new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
 //    private static final LatLngBounds ALL_THE_WORLD = new LatLngBounds(
 //            new LatLng(85, -180), new LatLng(-85, 180));
@@ -98,6 +111,50 @@ public class GoogleMapsTest extends AppCompatActivity implements
                 .addOnConnectionFailedListener(this)
                 .build();
 
+
+        tvSearch = (AutoCompleteTextView) findViewById(R.id.acCity);
+
+        tvSearch.setThreshold(3);
+
+        tvName = (TextView) findViewById(R.id.name);
+        tvAddress = (TextView) findViewById(R.id.address);
+        tvLatLong = (TextView) findViewById(R.id.latlong);
+        tvAtt = (TextView) findViewById(R.id.att);
+
+        tvLocal = (AutoCompleteTextView) findViewById(R.id.acLocals);
+        tvName2 = (TextView) findViewById(R.id.name2);
+        tvAddress2 = (TextView) findViewById(R.id.address2);
+        tvLatLong2 = (TextView) findViewById(R.id.latlong2);
+        tvPhone = (TextView) findViewById(R.id.phone);
+        tvWebPage = (TextView) findViewById(R.id.webpage);
+        tvAtt2 = (TextView) findViewById(R.id.att2);
+
+        tvSearch.setOnItemClickListener(mAutocompleteClickListener);
+        tvLocal.setOnItemClickListener(mAutocompleteClickListener);
+
+        ArrayList<Integer> filterTypes = new ArrayList<Integer>();
+        filterTypes.add(Place.TYPE_LOCALITY);
+        filterTypes.add(Place.TYPE_ADMINISTRATIVE_AREA_LEVEL_3);
+//        filterTypes.add(Place.TYPE_GEOCODE);
+
+        filterTypes2 = new ArrayList<Integer>();
+        filterTypes.add(Place.TYPE_ESTABLISHMENT);
+
+        mPlaceArrayAdapter = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
+                BOUNDS_MOUNTAIN_VIEW, filterTypes);
+                //BOUNDS_MOUNTAIN_VIEW, filter);
+
+        mPlaceArrayAdapter2 = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
+                BOUNDS, filterTypes2);
+
+        tvSearch.setAdapter(mPlaceArrayAdapter);
+        tvLocal.setAdapter(mPlaceArrayAdapter2);
+
+
+
+
+
+        // ***** Pick a Place *********************************************************************
         Button button = (Button) findViewById(R.id.busca);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -107,33 +164,11 @@ public class GoogleMapsTest extends AppCompatActivity implements
             }
         });
 
-        tvSearch = (AutoCompleteTextView) findViewById(R.id.acCity);
 
-        tvSearch.setThreshold(3);
 
-        tvName = (TextView) findViewById(R.id.name);
-        tvAddress = (TextView) findViewById(R.id.address);
-//        mIdTextView = (TextView) findViewById(R.id.place_id);
-//        mPhoneTextView = (TextView) findViewById(R.id.phone);
-//        mWebTextView = (TextView) findViewById(R.id.web);
-        tvAddress = (TextView) findViewById(R.id.att);
 
-        tvSearch.setOnItemClickListener(mAutocompleteClickListener);
 
-        ArrayList<Integer> filterTypes = new ArrayList<Integer>();
-        filterTypes.add(Place.TYPE_LOCALITY);
-        filterTypes.add(Place.TYPE_ADMINISTRATIVE_AREA_LEVEL_3);
-//        filterTypes.add(Place.TYPE_GEOCODE);
-
-//        AutocompleteFilter filter = null;
-//        filter = AutocompleteFilter.create(filterTypes);
-
-        mPlaceArrayAdapter = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
-                BOUNDS_MOUNTAIN_VIEW, filterTypes);
-                //BOUNDS_MOUNTAIN_VIEW, filter);
-
-        tvSearch.setAdapter(mPlaceArrayAdapter);
-
+        // ***** Get Last Location ****************************************************************
         PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
                 .getCurrentPlace(mGoogleApiClient, null);
 
@@ -161,6 +196,11 @@ public class GoogleMapsTest extends AppCompatActivity implements
             }
         });
 
+
+
+
+
+        // ***** Test Button **********************************************************************
         Button trips_and_cities = (Button) findViewById(R.id.bt1);
 
         trips_and_cities.setOnClickListener(new View.OnClickListener() {
@@ -297,6 +337,15 @@ public class GoogleMapsTest extends AppCompatActivity implements
 //            mIdTextView.setText(Html.fromHtml(place.getId() + ""));
 //            mPhoneTextView.setText(Html.fromHtml(place.getPhoneNumber() + ""));
 //            mWebTextView.setText(place.getWebsiteUri() + "");
+            tvLatLong.setText(Html.fromHtml(place.getLatLng().toString() + ""));
+
+            double lat = place.getLatLng().latitude;
+            double lng = place.getLatLng().longitude;
+
+            BOUNDS = new LatLngBounds(new LatLng(lat-0.5, lng-0.5), new LatLng(lat+0.5, lng+0.5));
+
+            mPlaceArrayAdapter2.setmBounds(BOUNDS);
+
             if (attributions != null) {
                 tvAtt.setText(Html.fromHtml(attributions.toString()));
             }

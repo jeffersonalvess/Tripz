@@ -65,6 +65,10 @@ public class PlaceArrayAdapter
             real_filter = AutocompleteFilter.create(filterTypes);
     }
 
+    public void setmBounds(LatLngBounds mBounds){this.mBounds = mBounds;}
+
+    public void setmPlaceFilter(ArrayList<Integer> mPlaceFilter){this.mPlaceFilter = mPlaceFilter;}
+
     public void setGoogleApiClient(GoogleApiClient googleApiClient) {
         if (googleApiClient == null || !googleApiClient.isConnected()) {
             mGoogleApiClient = null;
