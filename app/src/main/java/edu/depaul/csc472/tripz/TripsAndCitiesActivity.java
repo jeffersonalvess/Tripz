@@ -20,13 +20,16 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import edu.depaul.csc472.tripz.helper.City;
 import edu.depaul.csc472.tripz.helper.DatabaseHelper;
+import edu.depaul.csc472.tripz.helper.OurDate;
 import edu.depaul.csc472.tripz.helper.Trip;
 
 public class TripsAndCitiesActivity extends AppCompatActivity {
 
     int day, month, year, dayS, monthS, yearS;
     String whoIsMyMother = "";
+    String dateStart, dateEnd;
     final static int DIALOG_ID1 = 0;
     final static int DIALOG_ID2 = 1;
 
@@ -40,9 +43,9 @@ public class TripsAndCitiesActivity extends AppCompatActivity {
         final Button btnStart = (Button) findViewById(R.id.btnStart);
         final Button btnEnd = (Button) findViewById(R.id.btnEnd);
         TextView txtTrip = (TextView) findViewById(R.id.txtTrip);
-        TextView txtCity = (TextView) findViewById(R.id.txtVCity);
-        TextView startDate = (TextView) findViewById(R.id.txtStartDate);
-        TextView endDate = (TextView) findViewById(R.id.txtEndDate);
+        final TextView txtCity = (TextView) findViewById(R.id.txtVCity);
+        final TextView startDate = (TextView) findViewById(R.id.txtStartDate);
+        final TextView endDate = (TextView) findViewById(R.id.txtEndDate);
         final EditText editTrip = (EditText) findViewById(R.id.editTrip);
         final EditText editCity = (EditText) findViewById(R.id.editCity);
 
@@ -60,8 +63,8 @@ public class TripsAndCitiesActivity extends AppCompatActivity {
         });
 
 
-        Intent intent = getIntent();
-        if(intent != null)
+        final Intent intent = getIntent();
+        if (intent != null)
             whoIsMyMother = intent.getStringExtra("activityMother");
 
 
@@ -78,13 +81,11 @@ public class TripsAndCitiesActivity extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //
-                    // Insert here the code to insert a new Trip on database.
-                    //
+
                     String tripName = String.valueOf(editTrip.getText());
                     String snack = "You need to give a name for your new trip.";
 
-                    if(!tripName.equals("")) {
+                    if (!tripName.equals("")) {
                         Trip t = new Trip(tripName);
                         DatabaseHelper d = new DatabaseHelper(getApplicationContext());
                         d.createTrip(t);
@@ -95,6 +96,43 @@ public class TripsAndCitiesActivity extends AppCompatActivity {
                     }
 
                     Snackbar.make(view, snack, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                }
+            });
+        } else if (whoIsMyMother.equals("CitiesActivity")) {
+
+            toolbar.setTitle("New City");
+            txtTrip.setEnabled(false);
+            editTrip.setEnabled(false);
+            btnEnd.setEnabled(false);
+            startDate.setVisibility(View.INVISIBLE);
+            endDate.setVisibility(View.INVISIBLE);
+
+
+            String tripName = intent.getStringExtra("tripName");
+            editTrip.setText(tripName);
+
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int tripID = intent.getIntExtra("tripID", -1);
+                    String cityName = String.valueOf(editCity.getText());
+
+                    try {
+                        if (!cityName.equals("") && isDateOk(dateStart, dateEnd)) {
+                            City c = new City(tripID, cityName, new OurDate(String.valueOf(dateStart)), new OurDate((String.valueOf(dateEnd))));
+                            DatabaseHelper d = new DatabaseHelper(getApplicationContext());
+                            d.createCity(c);
+
+                            Snackbar.make(view, "City added.", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                            onBackPressed();
+                            finish();
+                        }
+                    } catch (ParseException e) {
+                        Snackbar.make(view, "Please check your dates.", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                        e.printStackTrace();
+                    }
+
+                    Snackbar.make(view, "You need to provide a city name to create a new city.", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
             });
         }
@@ -157,6 +195,9 @@ public class TripsAndCitiesActivity extends AppCompatActivity {
                     txtEnd.setVisibility(View.INVISIBLE);
                     txtStart.setText(dialogDate);
                     btnEnd.setEnabled(true);
+
+                    dateStart = String.valueOf(yearS) + "/" + String.valueOf(monthS) + String.valueOf(dayS);
+
                 } else {
                     Toast.makeText(TripsAndCitiesActivity.this, "The date should be equal or higher than today's date.", Toast.LENGTH_LONG).show();
                     txtStart.setVisibility(View.INVISIBLE);
@@ -186,6 +227,9 @@ public class TripsAndCitiesActivity extends AppCompatActivity {
                     txtEnd.setVisibility(View.VISIBLE);
                     txtEnd.setText(dialogDate);
                     btnEnd.setEnabled(true);
+
+                    dateEnd = String.valueOf(_year) + "/" + String.valueOf(monthOfYear + 1) + String.valueOf(dayOfMonth);
+
                 } else {
                     Toast.makeText(TripsAndCitiesActivity.this, "The date should be equal or higher than start's date.", Toast.LENGTH_LONG).show();
                     txtEnd.setVisibility(View.INVISIBLE);
@@ -207,6 +251,19 @@ public class TripsAndCitiesActivity extends AppCompatActivity {
         Date end = dateFormat.parse(paramDateEnd);
 
         if (start.after(end))
+            return false;
+
+        return true;
+    }
+
+    protected boolean isDateOk(String start, String end) throws ParseException {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+
+        Date s = dateFormat.parse(start);
+        Date e = dateFormat.parse(end);
+
+        if (s.after(e))
             return false;
 
         return true;

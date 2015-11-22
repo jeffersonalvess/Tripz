@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements TripListFragment.
         toolbar.setTitle("Tripz");
         setSupportActionBar(toolbar);
 
-
         ImageView userImage = (ImageView) findViewById(R.id.imageView);
 
         //Floating Action Button <<<NEEDS TO BE MODIFIED>>>
