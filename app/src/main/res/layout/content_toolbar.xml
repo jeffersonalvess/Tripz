@@ -25,6 +25,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/txtLine1"
             android:text="Test Name"
+            android:singleLine="true"
             android:textSize="25sp"
             android:textColor="@android:color/white"
             android:layout_toEndOf="@+id/imageView" />

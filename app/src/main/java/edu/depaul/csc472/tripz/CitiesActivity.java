@@ -60,7 +60,7 @@ public class CitiesActivity extends AppCompatActivity implements CityListFragmen
 
 
         txtTitle.setText(t.getName());
-        imgTrip.setImageResource(android.R.drawable.ic_dialog_map);
+        imgTrip.setImageResource(R.mipmap.ic_map_white);
         txtLine2.setVisibility(View.INVISIBLE);
         txtLine2.setText(String.valueOf(tripID));
 
