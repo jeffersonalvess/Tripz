@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -119,6 +120,7 @@ public class TripListFragment extends ListFragment {
     public void onActivityCreated(Bundle savedState) {
         super.onActivityCreated(savedState);
 
+        //registerForContextMenu(this.getListView());
         getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             @Override
@@ -128,6 +130,7 @@ public class TripListFragment extends ListFragment {
                 return true;
             }
         });
+
     }
 
     @Override
