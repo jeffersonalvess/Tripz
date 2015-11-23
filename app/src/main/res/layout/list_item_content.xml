@@ -41,4 +41,8 @@
             android:text="Small Text"
             android:id="@+id/txtLine2" />
     </LinearLayout>
+
+
+
+
 </LinearLayout>

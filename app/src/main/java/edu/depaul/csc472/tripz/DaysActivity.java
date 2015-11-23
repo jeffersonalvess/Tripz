@@ -10,13 +10,13 @@ import android.widget.TextView;
 
 import edu.depaul.csc472.tripz.helper.City;
 import edu.depaul.csc472.tripz.helper.DatabaseHelper;
-import edu.depaul.csc472.tripz.helper.Trip;
 
 public class DaysActivity extends AppCompatActivity implements DaysListFragment.Callbacks{
 
     public int _dayID = -1;
     public int _cityID = -1;
     public int _tripID = -1;
+    public String _cityName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +25,7 @@ public class DaysActivity extends AppCompatActivity implements DaysListFragment.
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        //TODO: Get an Intent from the CitiesActivity with the city name and Change the WindowTitle
-        toolbar.setTitle("Trip");
+        toolbar.setTitle("Trip Days");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -39,7 +38,6 @@ public class DaysActivity extends AppCompatActivity implements DaysListFragment.
             }
         });
 
-        //TODO: Complete these information with the Information that come from CitiesActivity information
         TextView txtTitle = (TextView) findViewById(R.id.txtLine1);
         TextView txtLine1 = (TextView) findViewById(R.id.txtLine2);
         TextView txtLine2 = (TextView) findViewById(R.id.txtLine3);
@@ -47,31 +45,26 @@ public class DaysActivity extends AppCompatActivity implements DaysListFragment.
 
         Intent intent = getIntent();
         int cityID = intent.getIntExtra("CityID", -1);
-        _cityID = cityID;
         int tripID = intent.getIntExtra("TripID", -1);
+        _cityID = cityID;
         _tripID = tripID;
 
         DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
         final City c = databaseHelper.getCity(cityID);
 
+        _cityName = c.getName();
         txtTitle.setText(c.getName());
-        imgTrip.setImageResource(R.mipmap.ic_location_city);
+        imgTrip.setImageResource(R.mipmap.ic_location_city_white);
         txtLine2.setVisibility(View.INVISIBLE);
         txtLine2.setText(String.valueOf(cityID));
 
-
-
         txtLine1.setVisibility(View.INVISIBLE);
-
-
-
 
         //Fragment call << Need improvement to implement tablet compatibility>>
         ((DaysListFragment) getFragmentManager().findFragmentById(R.id.days_list)).setActivateOnItemClick(true);
     }
 
     //This method is create to support Callbacks of DaysListFragment!!!
-
     @Override
     public void onItemSelected(int id, long cityID) {
         /* Use this when implement two panel layout, it's not implement yet. But I'll left the code for example.
@@ -101,6 +94,8 @@ public class DaysActivity extends AppCompatActivity implements DaysListFragment.
         Intent cityIntent = new Intent(DaysActivity.this, PlacesActivity.class);
         cityIntent.putExtra("DayID", id);
         cityIntent.putExtra("CityID", cityID);
+        cityIntent.putExtra("TripID", _tripID);
+        cityIntent.putExtra("CityName", _cityName);
         startActivity(cityIntent);
     }
 }
