@@ -12,10 +12,11 @@ import android.widget.TextView;
 import edu.depaul.csc472.tripz.helper.DatabaseHelper;
 import edu.depaul.csc472.tripz.helper.Trip;
 
-public class CitiesActivity extends AppCompatActivity {
+public class CitiesActivity extends AppCompatActivity implements CityListFragment.Callbacks {
 
     //TODO: implement fragments
-    int _tripID = -1;
+    public int _tripID = -1;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -36,6 +37,11 @@ public class CitiesActivity extends AppCompatActivity {
             }
         });
 
+        TextView txtTitle = (TextView) findViewById(R.id.txtLine1);
+        TextView txtLine1 = (TextView) findViewById(R.id.txtLine2);
+        TextView txtLine2 = (TextView) findViewById(R.id.txtLine3);
+        ImageView imgTrip = (ImageView) findViewById(R.id.imageView);
+
         Intent intent = getIntent();
         int tripID = intent.getIntExtra("TripID", -1);
         _tripID = tripID;
@@ -44,14 +50,10 @@ public class CitiesActivity extends AppCompatActivity {
         final Trip t = databaseHelper.getTrip(tripID);
 
 
-        TextView txtTitle = (TextView) findViewById(R.id.txtLine1);
-        TextView txtLine1 = (TextView) findViewById(R.id.txtLine2);
-        TextView txtLine2 = (TextView) findViewById(R.id.txtLine3);
-        ImageView imgTrip = (ImageView) findViewById(R.id.imageView);
-
         txtTitle.setText(t.getName());
         imgTrip.setImageResource(android.R.drawable.ic_dialog_map);
         txtLine2.setVisibility(View.INVISIBLE);
+        txtLine2.setText(String.valueOf(tripID));
 
         if(t.getStart().getAmericanDate().equals("02/28/1992") || t.getEnd().getAmericanDate().equals("02/28/1992"))
             txtLine1.setVisibility(View.INVISIBLE);
@@ -70,6 +72,9 @@ public class CitiesActivity extends AppCompatActivity {
                 startActivityForResult(intent, 0, savedInstanceState);
             }
         });
+
+        //Fragment call << Need improvement to implement tablet compatibility>>
+        ((CityListFragment) getFragmentManager().findFragmentById(R.id.cities_list)).setActivateOnItemClick(true);
 
     }
 
@@ -96,5 +101,13 @@ public class CitiesActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    @Override
+    public void onItemSelected(int id, int tripID) {
+        Intent cityIntent = new Intent(CitiesActivity.this, DaysActivity.class);
+        cityIntent.putExtra("CityID", id);
+        cityIntent.putExtra("TripID", tripID);
+        startActivity(cityIntent);
     }
 }

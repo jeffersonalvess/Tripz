@@ -130,7 +130,8 @@ public class TripsAndCitiesActivity extends AppCompatActivity implements
                         onBackPressed();
                         finish();
                     }
-                    Toast.makeText(TripsAndCitiesActivity.this, snack, Toast.LENGTH_LONG).show();
+                    else
+                        Toast.makeText(TripsAndCitiesActivity.this, snack, Toast.LENGTH_LONG).show();
                 }
             });
         }
