@@ -61,6 +61,8 @@ public class GoogleMapsTest extends AppCompatActivity implements
     private static LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
             new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
 
+    private Place place;
+
     double lat;
     double lng;
 
@@ -73,6 +75,7 @@ public class GoogleMapsTest extends AppCompatActivity implements
 
         lat = -190;
         lng = -190;
+        place = null;
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(AppIndex.API)
@@ -163,6 +166,10 @@ public class GoogleMapsTest extends AppCompatActivity implements
         try {
             PlacePicker.IntentBuilder intentBuilder =
                     new PlacePicker.IntentBuilder();
+            if(place != null)
+                intentBuilder.setLatLngBounds(new LatLngBounds(new LatLng(lat-0.002, lng-0.002),
+                        new LatLng(lat+0.002, lng+0.002)));
+
             Intent intent = intentBuilder.build(this);
             // Start the intent by requesting a result,
             // identified by a request code.
@@ -261,7 +268,7 @@ public class GoogleMapsTest extends AppCompatActivity implements
                 return;
             }
             // Selecting the first object buffer.
-            final Place place = places.get(0);
+            place = places.get(0);
             CharSequence attributions = places.getAttributions();
 
             tvName.setText(Html.fromHtml(place.getName() + ""));
