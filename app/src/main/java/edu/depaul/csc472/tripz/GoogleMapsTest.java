@@ -99,16 +99,13 @@ public class GoogleMapsTest extends AppCompatActivity implements
         ArrayList<Integer> filterTypes = new ArrayList<Integer>();
         filterTypes.add(Place.TYPE_LOCALITY);
         filterTypes.add(Place.TYPE_ADMINISTRATIVE_AREA_LEVEL_3);
-//        filterTypes.add(Place.TYPE_GEOCODE);
+        filterTypes.add(Place.TYPE_GEOCODE);
 
         mPlaceArrayAdapter = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
                 BOUNDS_MOUNTAIN_VIEW, filterTypes);
                 //BOUNDS_MOUNTAIN_VIEW, filter);
 
         tvSearch.setAdapter(mPlaceArrayAdapter);
-
-
-
 
 
         // ***** Pick a Place *********************************************************************
