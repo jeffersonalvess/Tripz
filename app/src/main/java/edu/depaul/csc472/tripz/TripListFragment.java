@@ -4,13 +4,16 @@ import android.app.Activity;
 import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -110,6 +113,21 @@ public class TripListFragment extends ListFragment {
         // mCallbacks.onItemSelected(WineList.WINES.get(position).getName());
 
         mCallbacks.onItemSelected(TRIPS.get(position).getId());
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedState) {
+        super.onActivityCreated(savedState);
+
+        getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                           int arg2, long arg3) {
+                Toast.makeText(getActivity(), "On long click listener", Toast.LENGTH_LONG).show();
+                return true;
+            }
+        });
     }
 
     @Override

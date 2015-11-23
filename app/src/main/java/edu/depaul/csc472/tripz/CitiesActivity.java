@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,7 +18,15 @@ public class CitiesActivity extends AppCompatActivity implements CityListFragmen
     //TODO: implement fragments
     public int _tripID = -1;
 
+    public Trip t;
 
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
+        t = databaseHelper.getTrip(t.getId());
+    }
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +56,7 @@ public class CitiesActivity extends AppCompatActivity implements CityListFragmen
         _tripID = tripID;
 
         DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
-        final Trip t = databaseHelper.getTrip(tripID);
+        t = databaseHelper.getTrip(tripID);
 
 
         txtTitle.setText(t.getName());
@@ -73,14 +82,28 @@ public class CitiesActivity extends AppCompatActivity implements CityListFragmen
             }
         });
 
+        ImageButton bEdit = (ImageButton) findViewById(R.id.editButton);
+
+        bEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CitiesActivity.this, TripsAndCitiesActivity.class);
+                intent.putExtra("activityMother", "EditTrip");
+                intent.putExtra("tripID", t.getId());
+                intent.putExtra("tripName", t.getName());
+                startActivityForResult(intent, 2, savedInstanceState);
+            }
+        });
+
         //Fragment call << Need improvement to implement tablet compatibility>>
-        ((CityListFragment) getFragmentManager().findFragmentById(R.id.cities_list)).setActivateOnItemClick(true);
+                ((CityListFragment) getFragmentManager().findFragmentById(R.id.cities_list)).setActivateOnItemClick(true);
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //
 
         if(requestCode == 0 && resultCode == RESULT_OK) {
             boolean b = data.getBooleanExtra("success", false);
@@ -98,6 +121,13 @@ public class CitiesActivity extends AppCompatActivity implements CityListFragmen
 
 
             }
+
+        }
+        else if(requestCode == 2 && resultCode == RESULT_OK) {
+            //boolean b = data.getBooleanExtra("success", false);
+                TextView txtTitle = (TextView) findViewById(R.id.txtLine1);
+                txtTitle.setText(data.getStringExtra("newName"));
+
 
         }
 

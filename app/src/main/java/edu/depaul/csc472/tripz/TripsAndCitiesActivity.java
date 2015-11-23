@@ -1,5 +1,6 @@
 package edu.depaul.csc472.tripz;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -174,6 +175,46 @@ public class TripsAndCitiesActivity extends AppCompatActivity implements
                         e.printStackTrace();
                     }
 
+                }
+            });
+        }
+        else if (whoIsMyMother.equals("EditTrip")) {
+
+            toolbar.setTitle("Edit Trip");
+            txtCity.setVisibility(View.GONE);
+            editCity.setVisibility(View.GONE);
+            startDate.setVisibility(View.INVISIBLE);
+            endDate.setVisibility(View.INVISIBLE);
+            btnEnd.setVisibility(View.INVISIBLE);
+            btnStart.setVisibility(View.INVISIBLE);
+
+            editTrip.setText(intent.getStringExtra("tripName"));
+            editTrip.setSelection(editTrip.getText().length());
+
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    String tripName = String.valueOf(editTrip.getText());
+                    String snack = "You need to give a name for your new trip.";
+
+                    if (!tripName.equals("")) {
+                        Trip t = new Trip(tripName);
+                        t.setId(intent.getIntExtra("tripID", -1));
+                        DatabaseHelper d = new DatabaseHelper(getApplicationContext());
+                        d.updateTrip(t);
+
+                        Toast.makeText(TripsAndCitiesActivity.this, "Trip name updated.", Toast.LENGTH_LONG).show();
+                        //onBackPressed();
+
+                        Intent intent2 = new Intent();
+                        intent2.putExtra("success", true);
+                        intent2.putExtra("newName", tripName);
+                        setResult(RESULT_OK, intent2);
+                        finish();
+                    }
+                    else
+                        Toast.makeText(TripsAndCitiesActivity.this, snack, Toast.LENGTH_LONG).show();
                 }
             });
         }

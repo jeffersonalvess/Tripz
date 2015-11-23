@@ -32,7 +32,9 @@
         android:singleLine="true"
         android:hint="Give a name for your trip."
         android:maxLength="20"
-        android:imeOptions="actionDone"/>
+        android:imeOptions="actionDone"
+        android:scrollIndicators="end"
+        android:longClickable="false" />
 
     <TextView
         android:layout_width="wrap_content"
