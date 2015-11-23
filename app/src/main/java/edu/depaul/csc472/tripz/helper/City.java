@@ -39,6 +39,7 @@ public class City {
         for(int i = 0; i <= dif; i++) {
             list_day.add(new Day(i + 1, start.addDaysOnDate(i)));
             Log.i("DayCreation", list_day.get(i).getIndex().toString());
+            Log.i("DayCreation", list_day.get(i).getDateString().toString());
         }
     }
 

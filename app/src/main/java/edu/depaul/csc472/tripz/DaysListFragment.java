@@ -1,16 +1,22 @@
 package edu.depaul.csc472.tripz;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ListFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.location.places.Place;
 
 import java.util.ArrayList;
 
@@ -66,6 +72,7 @@ public class DaysListFragment extends ListFragment {
     public void onStart() {
         super.onStart();
 
+
         DaysActivity daysActivity = (DaysActivity) getActivity();
         cityID = daysActivity._cityID;
 
@@ -119,6 +126,58 @@ public class DaysListFragment extends ListFragment {
         // mCallbacks.onItemSelected(WineList.WINES.get(position).getName());
 
         mCallbacks.onItemSelected(DAYS.get(position).getId(), DAYS.get(position).getIdCity());
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedState) {
+        super.onActivityCreated(savedState);
+
+        //registerForContextMenu(this.getListView());
+        getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                           final int arg2, long arg3) {
+                Toast.makeText(getActivity(), DAYS.get(arg2).getIndex() + " On long click listener ", Toast.LENGTH_LONG).show();
+
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(getListView().getContext());
+                builder1.setMessage("Do you want to delete Day " + DAYS.get(arg2).getIndex() + "?");
+
+                builder1.setCancelable(true);
+                builder1.setPositiveButton("Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+
+                                ArrayList<Place> ps = new ArrayList<Place>();
+
+                                //ds = databaseHelper.getDaysByCityId(CITIES.get(arg2).getId());
+                                //for (Day d : ds) {
+                                //    databaseHelper.deleteDay(d.getId());
+                                //}
+                                databaseHelper.deleteDay(DAYS.get(arg2).getId());
+
+                                Toast.makeText(getActivity(), DAYS.get(arg2).getIndex() + " deleted. ", Toast.LENGTH_LONG).show();
+
+                                DAYS.remove(arg2);
+
+                                ((TripsAdapter) getListAdapter()).notifyDataSetChanged();
+                                dialog.cancel();
+                            }
+                        });
+                builder1.setNegativeButton("No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+                return true;
+            }
+        });
+
     }
 
     @Override

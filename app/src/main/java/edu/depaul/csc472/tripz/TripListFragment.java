@@ -1,8 +1,10 @@
 package edu.depaul.csc472.tripz;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ListFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -16,9 +18,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.places.Place;
+
 import java.util.ArrayList;
 
+import edu.depaul.csc472.tripz.helper.City;
 import edu.depaul.csc472.tripz.helper.DatabaseHelper;
+import edu.depaul.csc472.tripz.helper.Day;
 import edu.depaul.csc472.tripz.helper.OurDate;
 import edu.depaul.csc472.tripz.helper.Trip;
 
@@ -116,6 +122,7 @@ public class TripListFragment extends ListFragment {
         mCallbacks.onItemSelected(TRIPS.get(position).getId());
     }
 
+
     @Override
     public void onActivityCreated(Bundle savedState) {
         super.onActivityCreated(savedState);
@@ -125,8 +132,46 @@ public class TripListFragment extends ListFragment {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-                                           int arg2, long arg3) {
-                Toast.makeText(getActivity(), "On long click listener", Toast.LENGTH_LONG).show();
+                                           final int arg2, long arg3) {
+                Toast.makeText(getActivity(), TRIPS.get(arg2).getName() + " On long click listener ", Toast.LENGTH_LONG).show();
+
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(getListView().getContext());
+                builder1.setMessage("Do you want to delete " + TRIPS.get(arg2).getName() + "?");
+
+                builder1.setCancelable(true);
+                builder1.setPositiveButton("Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                ArrayList<City> cs = new ArrayList<City>();
+                                ArrayList<Day> ds = new ArrayList<Day>();
+                                ArrayList<Place> ps = new ArrayList<Place>();
+
+                                cs = databaseHelper.getCitiesByTripId(TRIPS.get(arg2).getId());
+                                for (City c : cs) {
+                                    ds = databaseHelper.getDaysByCityId(c.getId());
+                                    for (Day d : ds) {
+                                        databaseHelper.deleteDay(d.getId());
+                                    }
+                                    databaseHelper.deleteCity(c.getId());
+                                }
+                                databaseHelper.deleteTrip(TRIPS.get(arg2).getId());
+
+                                TRIPS.remove(arg2);
+
+                                ((TripsAdapter) getListAdapter()).notifyDataSetChanged();
+                                dialog.cancel();
+                            }
+                        });
+                builder1.setNegativeButton("No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
                 return true;
             }
         });
