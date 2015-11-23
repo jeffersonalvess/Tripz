@@ -9,7 +9,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -64,8 +63,7 @@ public class TripsAndCitiesActivity extends AppCompatActivity implements
     private static LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
             new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
 
-    private AutoCompleteTextView editCity;
-
+    private AutoCompleteTextView mEditCity;
     private Place place;
 
     @Override
@@ -134,28 +132,29 @@ public class TripsAndCitiesActivity extends AppCompatActivity implements
                     Snackbar.make(view, snack, Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
             });
-        } else if (whoIsMyMother.equals("CitiesActivity")) {
+        }
+        else if (whoIsMyMother.equals("CitiesActivity")) {
 
             toolbar.setTitle("New City");
-            txtTrip.setEnabled(false);
+            txtTrip.setEnabled(true);
             editTrip.setEnabled(false);
             btnEnd.setEnabled(false);
             startDate.setVisibility(View.INVISIBLE);
             endDate.setVisibility(View.INVISIBLE);
 
-
-            String tripName = intent.getStringExtra("tripName");
-            editTrip.setText(tripName);
+            editTrip.setText( intent.getStringExtra("tripName"));
 
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //TODO: Finish the save button
+
                     int tripID = intent.getIntExtra("tripID", -1);
                     String cityName = String.valueOf(editCity.getText());
 
                     try {
                         if (!cityName.equals("") && isDateOk(dateStart, dateEnd)) {
-                            City c = new City(tripID, cityName, new OurDate(String.valueOf(dateStart)), new OurDate((String.valueOf(dateEnd))));
+                            City c = new City(tripID, "ID DO GOOGLE MAPS", cityName, new OurDate(String.valueOf(dateStart)), new OurDate((String.valueOf(dateEnd))));
                             DatabaseHelper d = new DatabaseHelper(getApplicationContext());
                             d.createCity(c);
 
@@ -316,11 +315,11 @@ public class TripsAndCitiesActivity extends AppCompatActivity implements
                 .addOnConnectionFailedListener(this)
                 .build();
 
-        editCity = (AutoCompleteTextView) findViewById(R.id.editCity);
+        mEditCity = (AutoCompleteTextView) findViewById(R.id.editCity);
 
-        editCity.setThreshold(3);
+        mEditCity.setThreshold(3);
 
-        editCity.setOnItemClickListener(mAutocompleteClickListener);
+        mEditCity.setOnItemClickListener(mAutocompleteClickListener);
 
         ArrayList<Integer> filterTypes = new ArrayList<Integer>();
         filterTypes.add(Place.TYPE_GEOCODE);
@@ -331,7 +330,7 @@ public class TripsAndCitiesActivity extends AppCompatActivity implements
                 BOUNDS_MOUNTAIN_VIEW, filterTypes);
 
 
-        editCity.setAdapter(mPlaceArrayAdapter);
+        mEditCity.setAdapter(mPlaceArrayAdapter);
     }
 
     @Override

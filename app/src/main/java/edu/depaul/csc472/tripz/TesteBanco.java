@@ -8,8 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
-import com.google.android.gms.location.places.Place;
-
 import java.util.ArrayList;
 
 import edu.depaul.csc472.tripz.helper.City;
@@ -67,10 +65,10 @@ public class TesteBanco extends AppCompatActivity {
         }
 
 
-        City city1 = new City(1, "Chicago", new OurDate("2015/08/18"), new OurDate("2015/08/29"));
-        City city2 = new City(1, "Sao Paulo", new OurDate("2015/07/18"), new OurDate("2015/07/29"));
-        City city3 = new City(2, "Recife", new OurDate("2015/05/18"), new OurDate("2015/05/29"));
-        City city4 = new City(3, "Chico", new OurDate("2015/03/18"), new OurDate("2015/03/29"));
+        City city1 = new City(1,"", "Chicago", new OurDate("2015/08/18"), new OurDate("2015/08/29"));
+        City city2 = new City(1,"", "Sao Paulo", new OurDate("2015/07/18"), new OurDate("2015/07/29"));
+        City city3 = new City(2,"", "Recife", new OurDate("2015/05/18"), new OurDate("2015/05/29"));
+        City city4 = new City(3,"", "Chico", new OurDate("2015/03/18"), new OurDate("2015/03/29"));
 
         long city1_id = db.createCity(city1);
         long city2_id = db.createCity(city2);

@@ -1,8 +1,6 @@
 package edu.depaul.csc472.tripz.helper;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by Miller on 19/11/2015.
@@ -26,11 +24,12 @@ public class City {
 
     public City() {}
 
-    public City(Integer idTrip, String name, OurDate start, OurDate end){
+    public City(Integer idTrip, String id_maps, String name, OurDate start, OurDate end){
         this.name = name;
         this.id_trip = idTrip;
         this.start = start;
         this.end = end;
+        this.id_maps = id_maps;
         list_day = new ArrayList<Day>();
 
         long dif = start.duration(end);
@@ -83,7 +82,7 @@ public class City {
 
     public void setStart(OurDate start){this.start = start;}
 
-    public Date getEnd(){return end;}
+    public OurDate getEnd(){return end;}
 
     public String getEndString(){return end.toString();}
 

@@ -14,8 +14,10 @@ import edu.depaul.csc472.tripz.helper.Trip;
 
 public class CitiesActivity extends AppCompatActivity {
 
+    int _tripID = -1;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cities);
 
@@ -34,10 +36,13 @@ public class CitiesActivity extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
-        final int tripID = intent.getIntExtra("tripID", -1);
+        int tripID = intent.getIntExtra("TripID", -1);
+        _tripID = tripID;
 
         DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
-        final Trip t = new Trip(); //databaseHelper.getTrip(tripID);
+        final Trip t = databaseHelper.getTrip(tripID);
+
+        System.out.println("Meu deus olha isso: " + tripID);
 
 
         TextView txtTitle = (TextView) findViewById(R.id.txtLine1);
@@ -46,9 +51,13 @@ public class CitiesActivity extends AppCompatActivity {
         ImageView imgTrip = (ImageView) findViewById(R.id.imageView);
 
         txtTitle.setText(t.getName());
-        txtLine1.setText(t.getStart().getAmericanDate() + " - " + t.getEnd().getAmericanDate());
-        txtLine2.setVisibility(View.INVISIBLE);
         imgTrip.setImageResource(android.R.drawable.ic_dialog_map);
+        txtLine2.setVisibility(View.INVISIBLE);
+
+        if(t.getStart().getAmericanDate().equals("02/28/1992") || t.getEnd().getAmericanDate().equals("02/28/1992"))
+            txtLine1.setVisibility(View.INVISIBLE);
+        else
+            txtLine1.setText(t.getStart().getAmericanDate() + " - " + t.getEnd().getAmericanDate());
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -57,15 +66,40 @@ public class CitiesActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(CitiesActivity.this, TripsAndCitiesActivity.class);
                 intent.putExtra("activityMother", "CitiesActivity");
-                intent.putExtra("tripID", tripID);
+                intent.putExtra("tripID", t.getId());
                 intent.putExtra("tripName", t.getName());
-                startActivity(intent);
+                startActivityForResult(intent, 0, savedInstanceState);
             }
         });
 
         //TODO: implement create city screen
         //TODO: implement fragments
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == 0) {
+            Intent intent = getIntent();
+            boolean b = intent.getBooleanExtra("success", false);
+            if (b) {
+
+                DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
+                final Trip t = databaseHelper.getTrip(_tripID);
+
+                TextView txtLine1 = (TextView) findViewById(R.id.txtLine2);
+
+                if(t.getStart().getAmericanDate().equals("02/28/1992") || t.getEnd().getAmericanDate().equals("02/28/1992"))
+                    txtLine1.setVisibility(View.INVISIBLE);
+                else
+                    txtLine1.setText(t.getStart().getAmericanDate() + " - " + t.getEnd().getAmericanDate());
+
+
+            }
+
+        }
 
     }
 }

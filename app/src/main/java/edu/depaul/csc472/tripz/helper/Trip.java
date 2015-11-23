@@ -1,7 +1,6 @@
 package edu.depaul.csc472.tripz.helper;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by Miller on 19/11/2015.
@@ -10,6 +9,11 @@ import java.util.Date;
 public class Trip {
     private Integer id;
     private String name;
+
+    public void setStart(OurDate start) {
+        this.start = start;
+    }
+
     private OurDate start;
     private OurDate end;
     private ArrayList<City> city_list;
@@ -123,7 +127,7 @@ public class Trip {
         this.end.setDate(end);
     }
 
-    public void setEnd(Date end) {
+    public void setEnd(OurDate end) {
         this.end.setDate(end);
     }
 

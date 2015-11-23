@@ -3,7 +3,6 @@ package edu.depaul.csc472.tripz.helper;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -43,6 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // CITY Table - column names
 
     private static final String KEY_ID_TRIP = "id_trip";
+    private static final String KEY_ID_MAPS = "id_maps";
 
     // DAY Table - column names
 
@@ -76,6 +76,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + TABLE_CITY + " ("
             + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + KEY_ID_TRIP + " INTEGER,"
+            + KEY_ID_MAPS + " TEXT"
             + KEY_NAME + " TEXT,"
             + KEY_START_DATE + " TEXT,"
             + KEY_END_DATE + " TEXT"
@@ -164,16 +165,67 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         {
             do {
                 Trip aux = new Trip();
-                aux.setId(c.getInt((c.getColumnIndex(KEY_ID)) ) );
+                aux.setId(c.getInt((c.getColumnIndex(KEY_ID))));
                 aux.setName(c.getString(c.getColumnIndex(KEY_NAME)));
-                //aux.setStartDate(c.getInt(c.getColumnIndex(KEY_START_DATE)));
-                //aux.setEndDate(c.getInt(c.getColumnIndex(KEY_END_DATE)));
+
+                ArrayList<City> cities = getCitiesByTripId(aux.getId());
+
+                if(cities.size() > 0) {
+                    OurDate ds = cities.get(0).getStart();
+                    OurDate de = cities.get(0).getEnd();
+
+                    for (City city: cities) {
+                        if(city.getStart().before(ds))
+                            ds = city.getStart();
+
+                        if(city.getEnd().after(de))
+                            de = city.getEnd();
+                    }
+
+                    aux.setStart(ds);
+                    aux.setEnd(de);
+                }
+
 
                 trips.add(aux);
             }while(c.moveToNext());
         }
 
         return trips;
+    }
+
+    public Trip getTrip (int id) {
+        String selectQuery = "SELECT * FROM " + TABLE_TRIP + " WHERE " + KEY_ID + " = " + String.valueOf(id);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        Trip t = new Trip();
+
+        if(c.moveToFirst()) {
+            t.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+            t.setName(c.getString(c.getColumnIndex(KEY_NAME)));
+
+            ArrayList<City> cities = getCitiesByTripId(t.getId());
+
+            if(cities.size() > 0) {
+                OurDate ds = cities.get(0).getStart();
+                OurDate de = cities.get(0).getEnd();
+
+                for (City city: cities) {
+                    if(city.getStart().before(ds))
+                        ds = city.getStart();
+
+                    if(city.getEnd().after(de))
+                        de = city.getEnd();
+                }
+
+                t.setStart(ds);
+                t.setEnd(de);
+            }
+
+            return t;
+        }
+
+        return null;
     }
 
     public int updateTrip(Trip trip)
@@ -207,7 +259,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        //values.put(KEY_ID, city.getId());
+        values.put(KEY_ID, city.getId());
+        values.put(KEY_ID_MAPS, city.getId_maps());
         values.put(KEY_ID_TRIP, city.getIdTrip());
         values.put(KEY_NAME, city.getName());
         values.put(KEY_START_DATE, city.getStartString());
@@ -233,9 +286,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         {
             do {
                 City aux = new City();
+                aux.setId(c.getInt((c.getColumnIndex(KEY_ID))));
+                aux.setIdTrip(c.getInt(c.getColumnIndex(KEY_ID_TRIP)));
+                aux.setName(c.getString(c.getColumnIndex(KEY_NAME)));
+                aux.setId_maps(c.getString(c.getColumnIndex(KEY_ID_MAPS)));
+                aux.setStart( OurDate.stringToDate(c.getString(c.getColumnIndex(KEY_START_DATE))) );
+                aux.setEnd( OurDate.stringToDate(c.getString(c.getColumnIndex(KEY_END_DATE))));
+
+                cities.add(aux);
+            }while(c.moveToNext());
+        }
+
+        return cities;
+    }
+
+    public City getCity(int id) {
+        String selectQuery = "SELECT * FROM " + TABLE_CITY + " WHERE " + KEY_ID + " = " + String.valueOf(id);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        City city = new City();
+
+        if(c.moveToFirst()) {
+            city.setId(c.getInt((c.getColumnIndex(KEY_ID)) ) );
+            city.setIdTrip(c.getInt(c.getColumnIndex(KEY_ID_TRIP)));
+            city.setName(c.getString(c.getColumnIndex(KEY_NAME)));
+            city.setId_maps(c.getString(c.getColumnIndex(KEY_ID_MAPS)));
+            city.setStart(OurDate.stringToDate(c.getString(c.getColumnIndex(KEY_START_DATE))));
+            city.setEnd(OurDate.stringToDate(c.getString(c.getColumnIndex(KEY_END_DATE))));
+
+            return city;
+        }
+
+        return null;
+    }
+
+    public ArrayList<City> getCitiesByTripId(int tripId)
+    {
+        ArrayList<City> cities = new ArrayList<City>();
+        String selectQuery = "SELECT * FROM " + TABLE_CITY + " WHERE " + KEY_ID_TRIP + " = " + String.valueOf(tripId);
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if(c.moveToFirst() )
+        {
+            do {
+                City aux = new City();
                 aux.setId(c.getInt((c.getColumnIndex(KEY_ID)) ) );
                 aux.setIdTrip(c.getInt(c.getColumnIndex(KEY_ID_TRIP)));
                 aux.setName(c.getString(c.getColumnIndex(KEY_NAME)));
+                aux.setId_maps(c.getString(c.getColumnIndex(KEY_ID_MAPS)));
                 aux.setStart( OurDate.stringToDate(c.getString(c.getColumnIndex(KEY_START_DATE))) );
                 aux.setEnd( OurDate.stringToDate(c.getString(c.getColumnIndex(KEY_END_DATE))));
 
@@ -253,6 +356,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_ID_TRIP, city.getIdTrip());
         values.put(KEY_NAME, city.getName());
+        values.put(KEY_ID_MAPS, city.getId_maps());
         values.put(KEY_START_DATE, city.getStartString());
         values.put(KEY_END_DATE, city.getEndString());
 
@@ -268,7 +372,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_TRIP, KEY_ID + " = ?",
                 new String[] {String.valueOf(city_id)});
     }
-
 
 
 

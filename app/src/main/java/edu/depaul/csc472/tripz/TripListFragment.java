@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import edu.depaul.csc472.tripz.helper.DatabaseHelper;
+import edu.depaul.csc472.tripz.helper.OurDate;
 import edu.depaul.csc472.tripz.helper.Trip;
 
 /**
@@ -30,6 +31,10 @@ public class TripListFragment extends ListFragment {
 
     /**  The current activated item position. Only used on tablets. */
     private int mActivatedPosition = ListView.INVALID_POSITION;
+
+    private DatabaseHelper databaseHelper;
+
+    public static ArrayList<Trip> TRIPS = new ArrayList<>();
 
 
     public TripListFragment() {}
@@ -48,14 +53,17 @@ public class TripListFragment extends ListFragment {
         }
     };
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        DatabaseHelper d = new DatabaseHelper(getActivity());
         setListAdapter(new TripsAdapter(getActivity()));
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        databaseHelper = new DatabaseHelper(getActivity());
+        TRIPS = databaseHelper.getTrips();
     }
 
     @Override
@@ -100,10 +108,8 @@ public class TripListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the fragment is attached to one) that an item has been selected.
         // mCallbacks.onItemSelected(WineList.WINES.get(position).getName());
-        DatabaseHelper d = new DatabaseHelper(getActivity());
-        ArrayList<Trip> trips = d.getTrips();
 
-        mCallbacks.onItemSelected(trips.get(position).getId());
+        mCallbacks.onItemSelected(TRIPS.get(position).getId());
     }
 
     @Override
@@ -145,22 +151,19 @@ public class TripListFragment extends ListFragment {
         ((TripsAdapter) getListAdapter()).notifyDataSetChanged();
     }
 
-
     static class TripsAdapter extends BaseAdapter {
 
         private LayoutInflater inflater;
-        private DatabaseHelper databaseHelper;
 
         TripsAdapter(Context context) {
             inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            databaseHelper = new DatabaseHelper(context);
         }
 
         @Override
-        public int getCount() { return databaseHelper.getTrips().size();}
+        public int getCount() { return TRIPS.size();}
 
         @Override
-        public Object getItem(int position) {return databaseHelper.getTrips().get(position);}
+        public Object getItem(int position) {return TRIPS.get(position);}
 
         @Override
         public long getItemId(int position) {return position;}
@@ -183,13 +186,17 @@ public class TripListFragment extends ListFragment {
             else
                 viewHolder = (ViewHolder) row.getTag();
 
-            Trip t = databaseHelper.getTrips().get(position);
+            Trip t = TRIPS.get(position);
+            OurDate d = new OurDate();
+            d.setDate("1992/02/28");
             viewHolder.icon.setImageResource(android.R.drawable.ic_dialog_map);
             viewHolder.title.setText(t.getName());
-
-            //TODO: Include methods to show the date.
-            viewHolder.line1.setText("START - END");
             viewHolder.line2.setVisibility(View.GONE);
+
+            if (t.getStart().getAmericanDate().equals(d.getAmericanDate()) || t.getEnd().getAmericanDate().equals(d.getAmericanDate()))
+                viewHolder.line1.setText("");
+            else
+                viewHolder.line1.setText(t.getStart().getAmericanDate() + " - " + t.getEnd().getAmericanDate());
 
             return row;
         }
@@ -200,5 +207,7 @@ public class TripListFragment extends ListFragment {
             TextView line1;
             TextView line2;
         }
+
+
     }
 }

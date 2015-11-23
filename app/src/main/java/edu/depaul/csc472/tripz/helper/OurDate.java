@@ -1,6 +1,5 @@
 package edu.depaul.csc472.tripz.helper;
 
-import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,7 +9,6 @@ import java.util.Date;
  */
 public class OurDate extends Date{
     public static final SimpleDateFormat curFormater = new SimpleDateFormat("yyyy/MM/dd");
-
     public static final SimpleDateFormat americanDate = new SimpleDateFormat("MM/dd/yyyy");
 
     public OurDate(){
