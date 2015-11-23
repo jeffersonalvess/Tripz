@@ -81,9 +81,8 @@ public class CitiesActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == 0) {
-            Intent intent = getIntent();
-            boolean b = intent.getBooleanExtra("success", false);
+        if(requestCode == 0 && resultCode == RESULT_OK) {
+            boolean b = data.getBooleanExtra("success", false);
             if (b) {
 
                 DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());

@@ -2,15 +2,16 @@ package edu.depaul.csc472.tripz;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -65,6 +66,7 @@ public class TripsAndCitiesActivity extends AppCompatActivity implements
 
     private AutoCompleteTextView mEditCity;
     private Place place;
+    private String _placeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,12 +126,11 @@ public class TripsAndCitiesActivity extends AppCompatActivity implements
                         DatabaseHelper d = new DatabaseHelper(getApplicationContext());
                         d.createTrip(t);
 
-                        Snackbar.make(view, "Trip created.", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                        Toast.makeText(TripsAndCitiesActivity.this, "Trip created.", Toast.LENGTH_LONG).show();
                         onBackPressed();
                         finish();
                     }
-
-                    Snackbar.make(view, snack, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    Toast.makeText(TripsAndCitiesActivity.this, snack, Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -150,30 +151,59 @@ public class TripsAndCitiesActivity extends AppCompatActivity implements
                     //TODO: Finish the save button
 
                     int tripID = intent.getIntExtra("tripID", -1);
-                    String cityName = String.valueOf(editCity.getText());
+                    String cityName = String.valueOf(mEditCity.getText());
 
                     try {
                         if (!cityName.equals("") && isDateOk(dateStart, dateEnd)) {
-                            City c = new City(tripID, "ID DO GOOGLE MAPS", cityName, new OurDate(String.valueOf(dateStart)), new OurDate((String.valueOf(dateEnd))));
+                            City c = new City(tripID, _placeId, cityName, new OurDate(String.valueOf(dateStart)), new OurDate((String.valueOf(dateEnd))));
                             DatabaseHelper d = new DatabaseHelper(getApplicationContext());
                             d.createCity(c);
 
-                            Snackbar.make(view, "City added.", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                            onBackPressed();
+                            Toast.makeText(TripsAndCitiesActivity.this, "City added.", Toast.LENGTH_LONG).show();
+                            Intent intent1 = new Intent();
+                            intent1.putExtra("success", true);
+                            setResult(RESULT_OK, intent1);
                             finish();
                         }
+                        else
+                            Toast.makeText(TripsAndCitiesActivity.this, "You need to provide a city name to create a new city.", Toast.LENGTH_LONG).show();
+
                     } catch (ParseException e) {
-                        Snackbar.make(view, "Please check your dates.", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                        Toast.makeText(TripsAndCitiesActivity.this, "Please check your dates.", Toast.LENGTH_LONG).show();
                         e.printStackTrace();
                     }
 
-                    Snackbar.make(view, "You need to provide a city name to create a new city.", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
             });
         }
 
 
         View.OnClickListener showDatePickerDialog = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Button btnDate = (Button) v;
+
+                if (btnDate.getText() == btnStart.getText()) {
+                    final Calendar dateNow = Calendar.getInstance();
+
+                    year = dateNow.get(Calendar.YEAR);
+                    month = dateNow.get(Calendar.MONTH);
+                    day = dateNow.get(Calendar.DAY_OF_MONTH);
+
+                    showDialog(DIALOG_ID1);
+                }
+                else {
+                    year =yearS;
+                    month = monthS;
+                    day = dayS;
+                    showDialog(DIALOG_ID2);
+                }
+
+            }
+        };
+
+        View.OnClickListener showDatePickerDialog2 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -193,7 +223,7 @@ public class TripsAndCitiesActivity extends AppCompatActivity implements
         };
 
         btnStart.setOnClickListener(showDatePickerDialog);
-        btnEnd.setOnClickListener(showDatePickerDialog);
+        btnEnd.setOnClickListener(showDatePickerDialog2);
 
     }
 
@@ -231,10 +261,11 @@ public class TripsAndCitiesActivity extends AppCompatActivity implements
                     txtStart.setText(dialogDate);
                     btnEnd.setEnabled(true);
 
-                    dateStart = String.valueOf(yearS) + "/" + String.valueOf(monthS) + String.valueOf(dayS);
+                    dateStart = String.valueOf(yearS) + "/" + String.valueOf(monthS) + "/" + String.valueOf(dayS);
 
                 } else {
                     Toast.makeText(TripsAndCitiesActivity.this, "The date should be equal or higher than today's date.", Toast.LENGTH_LONG).show();
+
                     txtStart.setVisibility(View.INVISIBLE);
                     txtEnd.setVisibility(View.INVISIBLE);
                     btnEnd.setEnabled(false);
@@ -263,10 +294,10 @@ public class TripsAndCitiesActivity extends AppCompatActivity implements
                     txtEnd.setText(dialogDate);
                     btnEnd.setEnabled(true);
 
-                    dateEnd = String.valueOf(_year) + "/" + String.valueOf(monthOfYear + 1) + String.valueOf(dayOfMonth);
+                    dateEnd = String.valueOf(_year) + "/" + String.valueOf(monthOfYear + 1) + "/" + String.valueOf(dayOfMonth);
 
                 } else {
-                    Toast.makeText(TripsAndCitiesActivity.this, "The date should be equal or higher than start's date.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(TripsAndCitiesActivity.this, "The date should be equal or highre than start's date.", Toast.LENGTH_LONG).show();
                     txtEnd.setVisibility(View.INVISIBLE);
                 }
             } catch (ParseException e) {
@@ -375,11 +406,18 @@ public class TripsAndCitiesActivity extends AppCompatActivity implements
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             final PlaceArrayAdapter.PlaceAutocomplete item = mPlaceArrayAdapter.getItem(position);
             final String placeId = String.valueOf(item.placeId);
+
+            _placeId = placeId;
+
+            InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+
             Log.i(LOG_TAG, "Selected: " + item.description);
             PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
                     .getPlaceById(mGoogleApiClient, placeId);
             placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
             Log.i(LOG_TAG, "Fetching details for ID: " + item.placeId);
+
         }
     };
 

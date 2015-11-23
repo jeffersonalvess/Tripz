@@ -31,7 +31,8 @@
         android:layout_marginStart="27dp"
         android:singleLine="true"
         android:hint="Give a name for your trip."
-        android:maxLength="20" />
+        android:maxLength="20"
+        android:imeOptions="actionDone"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -50,7 +51,8 @@
         android:layout_below="@+id/editTrip"
         android:layout_alignStart="@+id/editTrip"
         android:singleLine="true"
-        android:hint="Where are you going?" />
+        android:hint="Where are you going?"
+        android:imeOptions="actionDone"/>
 
     <LinearLayout
         android:orientation="horizontal"

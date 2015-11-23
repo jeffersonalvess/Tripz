@@ -76,7 +76,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + TABLE_CITY + " ("
             + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + KEY_ID_TRIP + " INTEGER,"
-            + KEY_ID_MAPS + " TEXT"
+            + KEY_ID_MAPS + " TEXT,"
             + KEY_NAME + " TEXT,"
             + KEY_START_DATE + " TEXT,"
             + KEY_END_DATE + " TEXT"
