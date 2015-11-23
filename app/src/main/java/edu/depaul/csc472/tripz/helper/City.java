@@ -1,5 +1,7 @@
 package edu.depaul.csc472.tripz.helper;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /**
@@ -34,17 +36,9 @@ public class City {
 
         long dif = start.duration(end);
 
-//        Teste de formatação das datas
-//        System.out.println("Dia " + WelcomeScreen.curFormater.format(start) + " ao dia "
-//                + WelcomeScreen.curFormater.format(end));
-
         for(int i = 0; i <= dif; i++) {
             list_day.add(new Day(i + 1, start.addDaysOnDate(i)));
-
-//            Teste de formatação das datas
-//            Date d = addDaysOnDate(start, i);
-//            list_day.add(new Day(i + 1, d));
-//            System.out.println("Dia " + (i+1) + ": " + WelcomeScreen.curFormater.format(d));
+            Log.i("DayCreation", list_day.get(i).getIndex().toString());
         }
     }
 
@@ -87,4 +81,6 @@ public class City {
     public String getEndString(){return end.toString();}
 
     public void setEnd(OurDate end){this.end = end;}
+
+    public ArrayList<Day> getList_day(){return list_day;}
 }

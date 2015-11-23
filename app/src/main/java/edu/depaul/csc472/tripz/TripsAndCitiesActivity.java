@@ -42,6 +42,7 @@ import java.util.Date;
 
 import edu.depaul.csc472.tripz.helper.City;
 import edu.depaul.csc472.tripz.helper.DatabaseHelper;
+import edu.depaul.csc472.tripz.helper.Day;
 import edu.depaul.csc472.tripz.helper.OurDate;
 import edu.depaul.csc472.tripz.helper.Trip;
 
@@ -159,7 +160,15 @@ public class TripsAndCitiesActivity extends AppCompatActivity implements
                         if (!cityName.equals("") && isDateOk(dateStart, dateEnd)) {
                             City c = new City(tripID, _placeId, cityName, new OurDate(String.valueOf(dateStart)), new OurDate((String.valueOf(dateEnd))));
                             DatabaseHelper d = new DatabaseHelper(getApplicationContext());
-                            d.createCity(c);
+                            long cityID = d.createCity(c);
+
+                            final int size = c.getList_day().size();
+
+                            for(int i = 0; i < size; i++){
+                                c.getList_day().get(i).setIdCity(cityID);
+                                d.createDay(c.getList_day().get(i));
+                            }
+
 
                             Toast.makeText(TripsAndCitiesActivity.this, "City added.", Toast.LENGTH_LONG).show();
                             Intent intent1 = new Intent();

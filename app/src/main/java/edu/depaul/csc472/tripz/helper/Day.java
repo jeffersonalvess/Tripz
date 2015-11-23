@@ -8,7 +8,7 @@ import java.util.Date;
  */
 public class Day /*extends Date*/{
     private Integer id;
-    private Integer id_city;
+    private long id_city;
     Integer index;
     OurDate date;
     private ArrayList<OurPlace> list_place;
@@ -21,14 +21,14 @@ public class Day /*extends Date*/{
 
     public Day(){}
 
-    public Day(Integer idCity, Integer index, OurDate date, ArrayList<OurPlace> list_place){
+    public Day(long idCity, Integer index, OurDate date, ArrayList<OurPlace> list_place){
         this.index = index;
         this.id_city = idCity;
         this.date = date;
         this.list_place = list_place;
     }
 
-    public Day(Integer idCity, Integer index, OurDate date){
+    public Day(long idCity, Integer index, OurDate date){
         this.index = index;
         this.id_city = idCity;
         this.date = date;
@@ -38,9 +38,9 @@ public class Day /*extends Date*/{
 
     public Integer getId(){ return this.id; }
 
-    public void setIdCity(Integer id){ this.id_city = id;}
+    public void setIdCity(long id){ this.id_city = id;}
 
-    public Integer getIdCity(){ return this.id_city;}
+    public long getIdCity(){ return this.id_city;}
 
     public void addOurPlace(OurPlace place){
         list_place.add(place);
@@ -58,7 +58,7 @@ public class Day /*extends Date*/{
 
     public void setIndex(Integer index){this.index = index;}
 
-    public Date getDate(){return date;}
+    public OurDate getDate(){return date;}
 
     public String getDateString(){return date.toString();}
 

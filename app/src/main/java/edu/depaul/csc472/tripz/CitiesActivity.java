@@ -108,7 +108,6 @@ public class CitiesActivity extends AppCompatActivity implements CityListFragmen
         if(requestCode == 0 && resultCode == RESULT_OK) {
             boolean b = data.getBooleanExtra("success", false);
             if (b) {
-
                 DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
                 final Trip t = databaseHelper.getTrip(_tripID);
 

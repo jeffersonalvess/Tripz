@@ -349,6 +349,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cities;
     }
 
+    // ** Miller ** - Please review this method.
+    public ArrayList<Day> getDaysByCityId(int cityId)
+    {
+        ArrayList<Day> days = new ArrayList<Day>();
+        String selectQuery = "SELECT * FROM " + TABLE_DAY + " WHERE " + KEY_ID_CITY + " = " + String.valueOf(cityId);
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if(c.moveToFirst() )
+        {
+            do {
+                Day aux = new Day();
+                aux.setId(c.getInt((c.getColumnIndex(KEY_ID))));
+                aux.setIdCity(c.getInt(c.getColumnIndex(KEY_ID_CITY)));
+                aux.setIndex(c.getInt(c.getColumnIndex(KEY_INDEX)));
+                aux.setDate(OurDate.stringToDate(c.getString(c.getColumnIndex(KEY_DATE))));
+
+                days.add(aux);
+            }while(c.moveToNext());
+        }
+
+        return days;
+    }
+
     public int updateCity(City city)
     {
         SQLiteDatabase db = this.getWritableDatabase();
