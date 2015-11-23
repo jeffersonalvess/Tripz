@@ -101,4 +101,5 @@
     <string name="title_activity_trips_and_cities">TripsAndCitiesActivity</string>
     <string name="title_activity_teste_banco">TesteBanco</string>
     <string name="title_activity_cities">CitiesActivity</string>
+    <string name="title_activity_days">DaysActivity</string>
 </resources>

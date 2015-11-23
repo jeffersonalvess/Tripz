@@ -14,6 +14,7 @@ import edu.depaul.csc472.tripz.helper.Trip;
 
 public class CitiesActivity extends AppCompatActivity {
 
+    //TODO: implement fragments
     int _tripID = -1;
 
     @Override
@@ -42,8 +43,6 @@ public class CitiesActivity extends AppCompatActivity {
         DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
         final Trip t = databaseHelper.getTrip(tripID);
 
-        System.out.println("Meu deus olha isso: " + tripID);
-
 
         TextView txtTitle = (TextView) findViewById(R.id.txtLine1);
         TextView txtLine1 = (TextView) findViewById(R.id.txtLine2);
@@ -71,9 +70,6 @@ public class CitiesActivity extends AppCompatActivity {
                 startActivityForResult(intent, 0, savedInstanceState);
             }
         });
-
-        //TODO: implement create city screen
-        //TODO: implement fragments
 
     }
 

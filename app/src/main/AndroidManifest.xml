@@ -55,6 +55,11 @@
             android:label="@string/title_activity_cities"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".DaysActivity"
+            android:label="@string/title_activity_days"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>
