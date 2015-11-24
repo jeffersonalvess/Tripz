@@ -303,7 +303,7 @@ public class PlacesListFragment extends ListFragment {
             });
 
             //viewHolder.icon.setImageResource(R.mipmap.ic_place_white);
-            viewHolder.title.setText("Day " + c.getName());
+            viewHolder.title.setText(c.getName());
             viewHolder.line1.setText(c.getAddress());
             viewHolder.line2.setText(c.getDescription());
             //viewHolder.line1.setText(c.getAddress());
