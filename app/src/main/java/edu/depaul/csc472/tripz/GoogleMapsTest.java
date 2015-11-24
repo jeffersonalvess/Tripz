@@ -63,8 +63,7 @@ public class GoogleMapsTest extends AppCompatActivity implements
 
     private Place place;
 
-    double lat;
-    double lng;
+    private ArrayList<Place> places;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +72,7 @@ public class GoogleMapsTest extends AppCompatActivity implements
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
 
-        lat = -190;
-        lng = -190;
+        places = new ArrayList<Place>();
         place = null;
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -131,8 +129,57 @@ public class GoogleMapsTest extends AppCompatActivity implements
         trips_and_cities.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GoogleMapsTest.this, TripsAndCitiesActivity.class);
-                startActivity(intent);
+//                if(place != null) {
+//                    String dest, ori;
+//
+//                    if(place.getAddress() != null) {
+//                        dest = place.getAddress().toString();
+//                        dest.replace(' ', '+');
+//                    }
+//                    else
+//                        dest = String.valueOf(place.getLatLng().latitude)
+//                                + "," + String.valueOf(place.getLatLng().longitude);
+//
+//                    Uri gmmIntentUri = Uri.parse("google.navigation:q=" + dest);
+//                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+//                    mapIntent.setPackage("com.google.android.apps.maps");
+//                    startActivity(mapIntent);
+//                }
+//                else{
+//                    Toast.makeText(GoogleMapsTest.this, "No destination selected", Toast.LENGTH_LONG).show();
+//                }
+
+                if(places.size() > 0 && MainActivity.actual_city != null){
+                    String dest = "";
+
+                    Log.i(LOG_TAG, "Cheguei aqui");
+
+                    dest = String.valueOf(MainActivity.actual_location.latitude)
+                            + "," + String.valueOf(MainActivity.actual_location.longitude) + "/";
+
+                    Log.i(LOG_TAG, "Cheguei aqui5");
+
+                    for(int i = 0; i < places.size(); i++){
+                        if(places.get(i).getAddress() != null) {
+                            String aux = places.get(i).getAddress().toString();
+                            aux = aux.replace(" ", "+");
+
+                            dest += aux;
+                        }
+                        else
+                            dest += String.valueOf(places.get(i).getLatLng().latitude)
+                                    + "," + String.valueOf(place.getLatLng().longitude);
+
+                        dest += "/";
+                    }
+
+                    Log.i(LOG_TAG, "URL: " + "https://www.google.com/maps/dir/" + dest);
+
+                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                            Uri.parse("https://www.google.com/maps/dir/" + dest));
+                    startActivity(intent);
+                }
+
             }
         });
 
@@ -153,8 +200,8 @@ public class GoogleMapsTest extends AppCompatActivity implements
             public void onClick(View v) {
                 Intent intent = new Intent(GoogleMapsTest.this, TestePlaces.class);
 
-                intent.putExtra("LAT", lat);
-                intent.putExtra("LNG", lng);
+                intent.putExtra("LAT", place.getLatLng().latitude);
+                intent.putExtra("LNG", place.getLatLng().longitude);
 
                 startActivity(intent);
             }
@@ -167,8 +214,9 @@ public class GoogleMapsTest extends AppCompatActivity implements
             PlacePicker.IntentBuilder intentBuilder =
                     new PlacePicker.IntentBuilder();
             if(place != null)
-                intentBuilder.setLatLngBounds(new LatLngBounds(new LatLng(lat-0.002, lng-0.002),
-                        new LatLng(lat+0.002, lng+0.002)));
+                intentBuilder.setLatLngBounds(new LatLngBounds(
+                        new LatLng(place.getLatLng().latitude-0.002,place.getLatLng().longitude-0.002),
+                        new LatLng(place.getLatLng().latitude+0.002, place.getLatLng().longitude+0.002)));
 
             Intent intent = intentBuilder.build(this);
             // Start the intent by requesting a result,
@@ -189,7 +237,9 @@ public class GoogleMapsTest extends AppCompatActivity implements
                 && resultCode == Activity.RESULT_OK) {
 
             // The user has selected a place. Extract the name and address.
-            final Place place = PlacePicker.getPlace(data, this);
+            place = PlacePicker.getPlace(data, this);
+
+            places.add(place);
 
             final CharSequence name = place.getName();
             final CharSequence address = place.getAddress();
@@ -274,9 +324,6 @@ public class GoogleMapsTest extends AppCompatActivity implements
             tvName.setText(Html.fromHtml(place.getName() + ""));
             tvAddress.setText(Html.fromHtml(place.getAddress() + ""));
             tvLatLong.setText(Html.fromHtml(place.getLatLng().toString() + ""));
-
-            lat = place.getLatLng().latitude;
-            lng = place.getLatLng().longitude;
 
             if (attributions != null) {
                 tvAtt.setText(Html.fromHtml(attributions.toString()));

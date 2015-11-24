@@ -25,6 +25,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements TripListFragment.
     private GoogleApiClient mGoogleApiClient;
 
     public static String actual_city;
+    public static LatLng actual_location;
 
     private TextView Line2;
 
@@ -56,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements TripListFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        actual_location = null;
 
         ((TextView) findViewById(R.id.txtLine2)).setText("");
 
@@ -187,6 +191,8 @@ public class MainActivity extends AppCompatActivity implements TripListFragment.
                 //Line2 = (TextView) findViewById(R.id.txtLine2);
                 String city = likelyPlaces.get(0).getPlace().getAddress().toString();
 
+                actual_location = likelyPlaces.get(0).getPlace().getLatLng();
+
                 int v1, v2;
 
                 for (v1 = 0; city.charAt(v1) != ','; v1++) ;
@@ -203,6 +209,10 @@ public class MainActivity extends AppCompatActivity implements TripListFragment.
 
                 //Line2.setText(actual_city);
                 ((TextView) findViewById(R.id.txtLine2)).setText(actual_city);
+
+//                Intent intent = new Intent();
+//                intent.setClass(MainActivity.this, GoogleMapsTest.class);
+//                startActivity(intent);
             }
         });
     }
