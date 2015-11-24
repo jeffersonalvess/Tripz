@@ -419,6 +419,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return day_id;
     }
 
+    public Day getDay(int id) {
+        String selectQuery = "SELECT * FROM " + TABLE_DAY + " WHERE " + KEY_ID + " = " + String.valueOf(id);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        Day day = new Day();
+
+        if(c.moveToFirst()) {
+            day.setId(c.getInt( (c.getColumnIndex(KEY_ID))));
+            day.setIdCity(c.getInt(c.getColumnIndex(KEY_ID_DAY)));
+            day.setIndex(c.getInt(c.getColumnIndex(KEY_INDEX)));
+            day.setDate(OurDate.stringToDate(c.getString(c.getColumnIndex(KEY_DATE))));
+
+            return day;
+        }
+
+        return null;
+    }
+
     public ArrayList<Day> getDays()
     {
         ArrayList<Day> days = new ArrayList<Day>();

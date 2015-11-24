@@ -1,5 +1,7 @@
 package edu.depaul.csc472.tripz.helper;
 
+import android.util.Log;
+
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,8 +48,9 @@ public class OurDate extends Date{
     }
 
     public OurDate addDaysOnDate(int days){
-        long daysInMilli = 1000 * 60 * 60 * 24 * days;
+        long daysInMilli = 1000 * 60 * 60 * 24 * (long) days;
 
+        //Log.i("Vai estourar: "daysInMilli)
         return new OurDate(getTime() + daysInMilli);
     }
 

@@ -6,6 +6,7 @@ import android.app.ListFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.google.android.gms.location.places.Place;
 
 import java.util.ArrayList;
 
+import edu.depaul.csc472.tripz.helper.City;
 import edu.depaul.csc472.tripz.helper.DatabaseHelper;
 import edu.depaul.csc472.tripz.helper.Day;
 import edu.depaul.csc472.tripz.helper.OurDate;
@@ -158,7 +160,22 @@ public class DaysListFragment extends ListFragment {
 
                                 Toast.makeText(getActivity(), DAYS.get(arg2).getIndex() + " deleted. ", Toast.LENGTH_LONG).show();
 
+                                City cNova = databaseHelper.getCity(cityID);
+
+                                if (cNova.getStart().equals(DAYS.get(arg2).getDate())) {
+                                    //ds = city.getStart();
+                                    cNova.setStart(cNova.getStart().addDaysOnDate(1));
+                                    Log.i("NOVA DATA: ", cNova.getStartString());
+                                }
+                                if (cNova.getEnd().equals(DAYS.get(arg2).getDate())) {
+                                    cNova.setEnd(cNova.getEnd().addDaysOnDate(-1));
+                                    Log.i("NOVA DATA: ", cNova.getEndString());
+                                }
+
+                                databaseHelper.updateCity(cNova);
+
                                 DAYS.remove(arg2);
+
 
                                 ((TripsAdapter) getListAdapter()).notifyDataSetChanged();
                                 dialog.cancel();
