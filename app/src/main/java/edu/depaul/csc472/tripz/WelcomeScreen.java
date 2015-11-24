@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -202,8 +203,14 @@ public class WelcomeScreen extends AppCompatActivity {
             //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
 
             TextView txtWelcome = (TextView) rootView.findViewById(R.id.txtWelcome);
+            TextView txtWelcome2 = (TextView) rootView.findViewById(R.id.txtWelcome2);
+            TextView txtWelcome3 = (TextView) rootView.findViewById(R.id.txtWelcome3);
+            TextView txtWelcome4 = (TextView) rootView.findViewById(R.id.txtWelcome4);
             ImageView imgLogo = (ImageView) rootView.findViewById(R.id.imgLogo);
             ImageView imgBalls = (ImageView) rootView.findViewById(R.id.imgBalls);
+            ImageView imgBack = (ImageView) rootView.findViewById(R.id.backScreen);
+            ImageView imgLogoFinal = (ImageView) rootView.findViewById(R.id.logoFinal);
+            ImageView imgFace = (ImageView) rootView.findViewById(R.id.logoFace);
             fbLoginButton = (LoginButton) rootView.findViewById(R.id.fb_login_button);
 
             mCallBackManager = CallbackManager.Factory.create();
@@ -217,21 +224,49 @@ public class WelcomeScreen extends AppCompatActivity {
             switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
                 case 1:
                     txtWelcome.setText("Welcome to Tripz");
-                    imgLogo.setImageResource(R.drawable.tripzlogo);
-                    imgBalls.setImageResource(R.drawable.ballsfirst);
+                    //imgLogo.setImageResource(R.drawable.tripzlogo);
+                    imgBalls.setImageResource(R.drawable.ballsfirst1);
+                    imgBack.setImageResource(R.drawable.brooklyn);
+                    imgLogoFinal.setVisibility(View.VISIBLE);
+                    imgFace.setVisibility(View.INVISIBLE);
+
+                    txtWelcome.setVisibility(View.INVISIBLE);
+                    txtWelcome2.setVisibility(View.VISIBLE);
+                    txtWelcome3.setVisibility(View.INVISIBLE);
+                    txtWelcome4.setVisibility(View.INVISIBLE);
+
+
                     break;
                 case 2:
                     txtWelcome.setText("Tripz will help you to manage your trips easily.");
                     txtWelcome.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                     imgLogo.setImageResource(R.drawable.tripzlogo);
-                    imgBalls.setImageResource(R.drawable.ballssecond);
+                    imgBalls.setImageResource(R.drawable.ballssecond2);
+                    imgBack.setImageResource(R.drawable.goldengate);
+
+                    imgLogoFinal.setVisibility(View.INVISIBLE);
+                    imgFace.setVisibility(View.INVISIBLE);
+
+                    txtWelcome.setVisibility(View.INVISIBLE);
+                    txtWelcome2.setVisibility(View.INVISIBLE);
+                    txtWelcome3.setVisibility(View.VISIBLE);
+                    txtWelcome4.setVisibility(View.INVISIBLE);
                     break;
                 case 3:
                     txtWelcome.setText("Enter with Facebook to start");
                     txtWelcome.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                     imgLogo.setImageResource(R.drawable.facebooklogo);
-                    imgBalls.setImageResource(R.drawable.ballsthird);
+                    imgBalls.setImageResource(R.drawable.ballsthird3);
                     fbLoginButton.setVisibility(View.VISIBLE);
+                    imgBack.setImageResource(R.drawable.cloudgate);
+
+                    imgLogoFinal.setVisibility(View.INVISIBLE);
+                    imgFace.setVisibility(View.VISIBLE);
+
+                    txtWelcome.setVisibility(View.INVISIBLE);
+                    txtWelcome2.setVisibility(View.INVISIBLE);
+                    txtWelcome3.setVisibility(View.INVISIBLE);
+                    txtWelcome4.setVisibility(View.VISIBLE);
                     break;
             }
 

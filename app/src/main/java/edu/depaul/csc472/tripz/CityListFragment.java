@@ -24,6 +24,7 @@ import edu.depaul.csc472.tripz.helper.City;
 import edu.depaul.csc472.tripz.helper.DatabaseHelper;
 import edu.depaul.csc472.tripz.helper.Day;
 import edu.depaul.csc472.tripz.helper.OurDate;
+import edu.depaul.csc472.tripz.helper.Trip;
 
 /**
  * Created by jeffersonalvess on 11/22/15.
@@ -158,14 +159,23 @@ public class CityListFragment extends ListFragment {
 
                                 ArrayList<City> cs;
                                 cs = databaseHelper.getCities();
-                                for(City c : cs)
-                                {
-                                    System.out.println("CITY: "+c.getName());
+                                for (City c : cs) {
+                                    System.out.println("CITY: " + c.getName());
                                 }
                                 Toast.makeText(getActivity(), CITIES.get(arg2).getName() + " deleted. ", Toast.LENGTH_LONG).show();
 
                                 CITIES.remove(arg2);
                                 ((TripsAdapter) getListAdapter()).notifyDataSetChanged();
+                                /*
+                                final Trip t = databaseHelper.getTrip(tripID);
+
+                                TextView txtLine1 = (TextView) findViewById(R.id.txtLine2);
+
+                                if (t.getStart().getAmericanDate().equals("02/28/1992") || t.getEnd().getAmericanDate().equals("02/28/1992"))
+                                    txtLine1.setVisibility(View.INVISIBLE);
+                                else
+                                    txtLine1.setText(t.getStart().getAmericanDate() + " - " + t.getEnd().getAmericanDate());
+                                    */
                                 dialog.cancel();
                             }
                         });

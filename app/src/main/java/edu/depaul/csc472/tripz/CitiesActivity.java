@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import edu.depaul.csc472.tripz.helper.DatabaseHelper;
 import edu.depaul.csc472.tripz.helper.Trip;
@@ -26,6 +27,21 @@ public class CitiesActivity extends AppCompatActivity implements CityListFragmen
         super.onStart();
         DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
         t = databaseHelper.getTrip(t.getId());
+        //Toast.makeText(this, )
+        //Toast.makeText(this," CARALHOOO START ", Toast.LENGTH_LONG).show();
+        TextView txtLine1 = (TextView) findViewById(R.id.txtLine2);
+
+        if (t.getStart().getAmericanDate().equals("02/28/1992") || t.getEnd().getAmericanDate().equals("02/28/1992"))
+            txtLine1.setVisibility(View.INVISIBLE);
+        else
+            txtLine1.setText(t.getStart().getAmericanDate() + " - " + t.getEnd().getAmericanDate());
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        //Toast.makeText(this," CARALHOOO RESUME ", Toast.LENGTH_LONG).show();
     }
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
