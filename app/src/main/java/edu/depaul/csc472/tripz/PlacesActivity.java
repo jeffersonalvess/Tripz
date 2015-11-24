@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -38,7 +39,6 @@ public class PlacesActivity extends AppCompatActivity {
     public int _cityID = -1;
     public int _tripID = -1;
     public int _dayNumber = -1;
-
 
     private static final String LOG_TAG = "PlacesActivity";
 
@@ -166,10 +166,7 @@ public class PlacesActivity extends AppCompatActivity {
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         searchView = (AutoCompleteTextView) MenuItemCompat.getActionView(searchItem);
-        final ActionBar.LayoutParams lp = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
         final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(searchView, InputMethodManager.SHOW_IMPLICIT);
-
 
         // Configure the search info and add any event listeners...
 
@@ -179,6 +176,8 @@ public class PlacesActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 // Do something when action item collapses
+                searchView.clearFocus();
+                imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
 
                 return true;  // Return true to collapse action view
             }
@@ -186,8 +185,9 @@ public class PlacesActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
                 // Do something when expanded
-                searchView.setLayoutParams(lp);
-                searchView.setCompletionHint("Search for places");
+                searchView.setWidth((getWindowManager().getDefaultDisplay().getWidth()) - 50);
+                searchView.setSingleLine(true);
+                searchView.setImeOptions(EditorInfo.IME_ACTION_GO);
                 searchView.requestFocus();
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
