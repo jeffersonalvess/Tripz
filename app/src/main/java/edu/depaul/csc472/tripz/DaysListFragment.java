@@ -20,7 +20,6 @@ import com.google.android.gms.location.places.Place;
 
 import java.util.ArrayList;
 
-import edu.depaul.csc472.tripz.helper.City;
 import edu.depaul.csc472.tripz.helper.DatabaseHelper;
 import edu.depaul.csc472.tripz.helper.Day;
 import edu.depaul.csc472.tripz.helper.OurDate;
@@ -51,13 +50,13 @@ public class DaysListFragment extends ListFragment {
     /** A callback interface that all activities containing this fragment must implement. This mechanism allows activities to be notified of item selections. */
     public interface Callbacks {
         /**  Callback for when an item has been selected. */
-        public void onItemSelected(int id, long cityID);
+        public void onItemSelected(int id, int cityID);
     }
 
     /** A dummy implementation of the {@link Callbacks} interface that does nothing. Used only when this fragment is not attached to an activity. */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onItemSelected(int id, long cityID) {
+        public void onItemSelected(int id, int cityID) {
         }
     };
 
@@ -125,7 +124,7 @@ public class DaysListFragment extends ListFragment {
         // Notify the active callbacks interface (the activity, if the fragment is attached to one) that an item has been selected.
         // mCallbacks.onItemSelected(WineList.WINES.get(position).getName());
 
-        mCallbacks.onItemSelected(DAYS.get(position).getId(), DAYS.get(position).getIdCity());
+        mCallbacks.onItemSelected(DAYS.get(position).getId(), DAYS.get(position).getIndex());
     }
 
     @Override

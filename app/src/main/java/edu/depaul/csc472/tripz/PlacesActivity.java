@@ -18,6 +18,7 @@ public class PlacesActivity extends AppCompatActivity {
     public int _dayID = -1;
     public int _cityID = -1;
     public int _tripID = -1;
+    public int _dayNumber = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class PlacesActivity extends AppCompatActivity {
         _dayID = i.getIntExtra("DayID", _dayID);
         _cityID = i.getIntExtra("CityID", _cityID);
         _tripID = i.getIntExtra("TripID", _tripID);
+        _dayNumber = i.getIntExtra("DayIndex", _dayNumber);
 
         //TODO: Get day from database
 
@@ -59,7 +61,7 @@ public class PlacesActivity extends AppCompatActivity {
 
         imgTrip.setImageResource(R.mipmap.ic_place_white);
         txtTitle.setText(cityName);
-        txtLine1.setText("Day " + _dayID);
+        txtLine1.setText("Day " + _dayNumber);
         txtLine2.setVisibility(View.INVISIBLE);
     }
 

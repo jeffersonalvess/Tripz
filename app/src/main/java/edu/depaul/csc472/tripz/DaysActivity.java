@@ -66,7 +66,7 @@ public class DaysActivity extends AppCompatActivity implements DaysListFragment.
 
     //This method is create to support Callbacks of DaysListFragment!!!
     @Override
-    public void onItemSelected(int id, long cityID) {
+    public void onItemSelected(int id, int dayNumber) {
         /* Use this when implement two panel layout, it's not implement yet. But I'll left the code for example.
 
         /*if (mTwoPane) {
@@ -93,7 +93,8 @@ public class DaysActivity extends AppCompatActivity implements DaysListFragment.
 
         Intent cityIntent = new Intent(DaysActivity.this, PlacesActivity.class);
         cityIntent.putExtra("DayID", id);
-        cityIntent.putExtra("CityID", cityID);
+        cityIntent.putExtra("DayIndex", dayNumber);
+        cityIntent.putExtra("CityID", _cityID);
         cityIntent.putExtra("TripID", _tripID);
         cityIntent.putExtra("CityName", _cityName);
         startActivity(cityIntent);
