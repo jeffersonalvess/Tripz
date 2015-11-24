@@ -397,7 +397,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteCity(long city_id)
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_TRIP, KEY_ID + " = ?",
+        db.delete(TABLE_CITY, KEY_ID + " = ?",
                 new String[] {String.valueOf(city_id)});
     }
 

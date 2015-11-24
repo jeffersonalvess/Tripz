@@ -156,6 +156,12 @@ public class CityListFragment extends ListFragment {
                                 }
                                 databaseHelper.deleteCity(CITIES.get(arg2).getId());
 
+                                ArrayList<City> cs;
+                                cs = databaseHelper.getCities();
+                                for(City c : cs)
+                                {
+                                    System.out.println("CITY: "+c.getName());
+                                }
                                 Toast.makeText(getActivity(), CITIES.get(arg2).getName() + " deleted. ", Toast.LENGTH_LONG).show();
 
                                 CITIES.remove(arg2);
