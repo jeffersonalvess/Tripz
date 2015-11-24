@@ -129,56 +129,56 @@ public class GoogleMapsTest extends AppCompatActivity implements
         trips_and_cities.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if(place != null) {
-//                    String dest, ori;
-//
-//                    if(place.getAddress() != null) {
-//                        dest = place.getAddress().toString();
-//                        dest.replace(' ', '+');
-//                    }
-//                    else
-//                        dest = String.valueOf(place.getLatLng().latitude)
-//                                + "," + String.valueOf(place.getLatLng().longitude);
-//
-//                    Uri gmmIntentUri = Uri.parse("google.navigation:q=" + dest);
-//                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-//                    mapIntent.setPackage("com.google.android.apps.maps");
-//                    startActivity(mapIntent);
-//                }
-//                else{
-//                    Toast.makeText(GoogleMapsTest.this, "No destination selected", Toast.LENGTH_LONG).show();
-//                }
+                if(place != null) {
+                    String dest, ori;
 
-                if(places.size() > 0 && MainActivity.actual_city != null){
-                    String dest = "";
-
-                    Log.i(LOG_TAG, "Cheguei aqui");
-
-                    dest = String.valueOf(MainActivity.actual_location.latitude)
-                            + "," + String.valueOf(MainActivity.actual_location.longitude) + "/";
-
-                    Log.i(LOG_TAG, "Cheguei aqui5");
-
-                    for(int i = 0; i < places.size(); i++){
-                        if(places.get(i).getAddress() != null) {
-                            String aux = places.get(i).getAddress().toString();
-                            aux = aux.replace(" ", "+");
-
-                            dest += aux;
-                        }
-                        else
-                            dest += String.valueOf(places.get(i).getLatLng().latitude)
-                                    + "," + String.valueOf(place.getLatLng().longitude);
-
-                        dest += "/";
+                    if(place.getAddress() != null) {
+                        dest = place.getAddress().toString();
+                        dest.replace(' ', '+');
                     }
+                    else
+                        dest = String.valueOf(place.getLatLng().latitude)
+                                + "," + String.valueOf(place.getLatLng().longitude);
 
-                    Log.i(LOG_TAG, "URL: " + "https://www.google.com/maps/dir/" + dest);
-
-                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                            Uri.parse("https://www.google.com/maps/dir/" + dest));
-                    startActivity(intent);
+                    Uri gmmIntentUri = Uri.parse("google.navigation:q=" + dest);
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    startActivity(mapIntent);
                 }
+                else{
+                    Toast.makeText(GoogleMapsTest.this, "No destination selected", Toast.LENGTH_LONG).show();
+                }
+
+//                if(places.size() > 0 && MainActivity.actual_city != null){
+//                    String dest = "";
+//
+//                    Log.i(LOG_TAG, "Cheguei aqui");
+//
+//                    dest = String.valueOf(MainActivity.actual_location.latitude)
+//                            + "," + String.valueOf(MainActivity.actual_location.longitude) + "/";
+//
+//                    Log.i(LOG_TAG, "Cheguei aqui5");
+//
+//                    for(int i = 0; i < places.size(); i++){
+//                        if(places.get(i).getAddress() != null) {
+//                            String aux = places.get(i).getAddress().toString();
+//                            aux = aux.replace(" ", "+");
+//
+//                            dest += aux;
+//                        }
+//                        else
+//                            dest += String.valueOf(places.get(i).getLatLng().latitude)
+//                                    + "," + String.valueOf(place.getLatLng().longitude);
+//
+//                        dest += "/";
+//                    }
+//
+//                    Log.i(LOG_TAG, "URL: " + "https://www.google.com/maps/dir/" + dest);
+//
+//                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+//                            Uri.parse("https://www.google.com/maps/dir/" + dest));
+//                    startActivity(intent);
+//                }
 
             }
         });

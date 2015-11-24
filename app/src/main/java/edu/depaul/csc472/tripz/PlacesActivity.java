@@ -1,15 +1,18 @@
 package edu.depaul.csc472.tripz;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +30,8 @@ import android.widget.Toast;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -34,21 +39,28 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.ArrayList;
 
+import edu.depaul.csc472.tripz.helper.City;
 import edu.depaul.csc472.tripz.helper.DatabaseHelper;
+import edu.depaul.csc472.tripz.helper.Day;
+import edu.depaul.csc472.tripz.helper.OurPlace;
 
 public class PlacesActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks {
+        GoogleApiClient.ConnectionCallbacks,
+        PlacesListFragment.Callbacks{
 
     public int _dayID = -1;
     public int _cityID = -1;
     public int _tripID = -1;
     public int _dayNumber = -1;
+
+    private static final int REQUEST_PLACE_PICKER = 1;
 
     private static final String LOG_TAG = "PlacesActivity";
 
@@ -57,7 +69,9 @@ public class PlacesActivity extends AppCompatActivity implements
 
     private static final int GOOGLE_API_CLIENT_ID = 4;
 
-    private Place place;
+    private LatLng ll;
+
+    //private Place place;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -72,7 +86,7 @@ public class PlacesActivity extends AppCompatActivity implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
 
-        toolbar.setTitle("Trip Days");
+        toolbar.setTitle("Trip Places");
         collapsingToolbarLayout.setTitle("");
         collapsingToolbarLayout.setTitleEnabled(false);
 
@@ -88,10 +102,22 @@ public class PlacesActivity extends AppCompatActivity implements
             }
         });
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onPickButtonClick(view);
+            }
+        });
+
 
         Intent i = getIntent();
         String cityName = i.getStringExtra("CityName");
+
         _dayID = i.getIntExtra("DayID", _dayID);
+
+        Log.i(LOG_TAG, "DayID: " + _dayID);
+
         _cityID = i.getIntExtra("CityID", _cityID);
         _tripID = i.getIntExtra("TripID", _tripID);
         _dayNumber = i.getIntExtra("DayIndex", _dayNumber);
@@ -112,6 +138,10 @@ public class PlacesActivity extends AppCompatActivity implements
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+
+        //HAHAHA
+        ((PlacesListFragment) getFragmentManager().findFragmentById(R.id.place_list)).setActivateOnItemClick(true);
     }
 
     private void setAutoComplete() {
@@ -126,7 +156,7 @@ public class PlacesActivity extends AppCompatActivity implements
                 .build();
 
 
-        LatLng ll = DaysActivity.CITY_BOUNDS;
+        ll = DaysActivity.CITY_BOUNDS;
 
         ArrayList<Integer> filterTypes = new ArrayList<Integer>();
         filterTypes.add(Place.TYPE_ESTABLISHMENT);
@@ -167,8 +197,17 @@ public class PlacesActivity extends AppCompatActivity implements
                         places.getStatus().toString());
                 return;
             }
+
+            //((PlacesListFragment) getFragmentManager().findFragmentById(R.id.place_list)).
             // Selecting the first object buffer.
-            place = places.get(0);
+
+            String s = "";
+            CharSequence att = places.getAttributions();
+            if(att != null)
+                s=att.toString();
+
+            addPlace(places.get(0), s);
+            ((PlacesListFragment) getFragmentManager().findFragmentById(R.id.place_list)).updateList();
         }
     };
 
@@ -191,6 +230,7 @@ public class PlacesActivity extends AppCompatActivity implements
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 // Do something when action item collapses
                 searchView.clearFocus();
+                searchView.setText("");
                 imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
 
                 return true;  // Return true to collapse action view
@@ -199,11 +239,11 @@ public class PlacesActivity extends AppCompatActivity implements
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
                 // Do something when expanded
-                searchView.setWidth((getWindowManager().getDefaultDisplay().getWidth()) - 50);
                 searchView.setSingleLine(true);
                 searchView.setImeOptions(EditorInfo.IME_ACTION_GO);
                 searchView.requestFocus();
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                searchView.setWidth((getWindowManager().getDefaultDisplay().getWidth()) - (int) searchView.getX() - 50);
 
                 searchView.setThreshold(3);
 
@@ -224,6 +264,36 @@ public class PlacesActivity extends AppCompatActivity implements
         // Any other things you have to do when creating the options menu…
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode,
+                                    int resultCode, Intent data) {
+        if (requestCode == REQUEST_PLACE_PICKER
+                && resultCode == Activity.RESULT_OK) {
+
+            // The user has selected a place. Extract the name and address.
+
+            String s = PlacePicker.getAttributions(data);
+
+            if(s == null)
+                s = "";
+
+            addPlace(PlacePicker.getPlace(data, this), s);
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    void addPlace(Place place, String att){
+        DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
+        Day d = databaseHelper.getDay(_dayID);
+        OurPlace p = new OurPlace(_dayID, place.getName().toString(), att, place.getAddress().toString());
+
+        d.addOurPlace(p);
+        databaseHelper.createPlace(p);
+
+        databaseHelper.closeDB();
     }
 
     @Override
@@ -287,5 +357,37 @@ public class PlacesActivity extends AppCompatActivity implements
         );
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
+    }
+
+    public void onPickButtonClick(View v) {
+        // Construct an intent for the place picker
+        try {
+            PlacePicker.IntentBuilder intentBuilder =
+                    new PlacePicker.IntentBuilder();
+            if(ll != null)
+                intentBuilder.setLatLngBounds(new LatLngBounds(
+                        new LatLng(ll.latitude-0.002, ll.longitude-0.002),
+                        new LatLng(ll.latitude+0.002, ll.longitude+0.002)));
+
+            Intent intent = intentBuilder.build(this);
+            // Start the intent by requesting a result,
+            // identified by a request code.
+            startActivityForResult(intent, REQUEST_PLACE_PICKER);
+
+        } catch (GooglePlayServicesRepairableException e) {
+            // ...
+        } catch (GooglePlayServicesNotAvailableException e) {
+            // ...
+        }
+    }
+
+    @Override
+    public void onItemSelected(OurPlace place) {
+
+//        Intent intent = new Intent();
+//
+//        intent.
+
+        Log.i(LOG_TAG, "YES!");
     }
 }

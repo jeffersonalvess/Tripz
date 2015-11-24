@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.google.android.gms.location.places.Place;
+
 import java.util.ArrayList;
 
 /**
@@ -377,6 +379,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return days;
     }
 
+    public ArrayList<OurPlace> getPlacesByDayId(int dayId)
+    {
+        ArrayList<OurPlace> places = new ArrayList<OurPlace>();
+        String selectQuery = "SELECT * FROM " + TABLE_OURPLACE + " WHERE " + KEY_ID_DAY + " = " + String.valueOf(dayId);
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if(c.moveToFirst() )
+        {
+            do {
+                OurPlace aux = new OurPlace();
+                aux.setId(c.getInt((c.getColumnIndex(KEY_ID))));
+                aux.setIdDay(c.getInt(c.getColumnIndex(KEY_ID_DAY)));
+                aux.setName(c.getString(c.getColumnIndex(KEY_NAME)));
+                aux.setDescription(c.getString(c.getColumnIndex(KEY_DESCRIPTION)));
+                aux.setAddress(c.getString(c.getColumnIndex(KEY_ADDRESS)));
+
+                places.add(aux);
+            }while(c.moveToNext());
+        }
+
+        return places;
+    }
+
     public int updateCity(City city)
     {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -426,10 +456,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Day day = new Day();
 
         if(c.moveToFirst()) {
-            day.setId(c.getInt( (c.getColumnIndex(KEY_ID))));
-            day.setIdCity(c.getInt(c.getColumnIndex(KEY_ID_DAY)));
-            day.setIndex(c.getInt(c.getColumnIndex(KEY_INDEX)));
-            day.setDate(OurDate.stringToDate(c.getString(c.getColumnIndex(KEY_DATE))));
+//            day.setId(c.getInt( (c.getColumnIndex(KEY_ID))));
+//            day.setIdCity(c.getInt(c.getColumnIndex(KEY_ID_DAY)));
+//            day.setIndex(c.getInt(c.getColumnIndex(KEY_INDEX)));
+//            day.setDate(OurDate.stringToDate(c.getString(c.getColumnIndex(KEY_DATE))));
 
             return day;
         }

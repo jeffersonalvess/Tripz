@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<fragment
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/place_list"
+    android:name="edu.depaul.csc472.tripz.PlacesListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="20dp"
+    tools:context="edu.depaul.csc472.tripz.MainActivity"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="edu.depaul.csc472.tripz.PlacesActivity"
-    tools:showIn="@layout/activity_places">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
-
-</android.support.v4.widget.NestedScrollView>
+    tools:layout="@android:layout/list_content"
+    tools:showIn="@layout/activity_main"/>

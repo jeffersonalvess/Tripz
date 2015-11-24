@@ -28,10 +28,24 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <include layout="@layout/content_toolbar" />
+            <include
+                android:id="@+id/content_toolbar"
+                layout="@layout/content_toolbar" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
+
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="190dp"
+        android:layout_marginLeft="4dp"
+        android:src="@drawable/powered_by_google_light"
+        app:layout_anchor="@id/content_toolbar"
+        app:layout_anchorGravity="bottom|start" />
+
 
     <include layout="@layout/content_places" />
 
@@ -40,28 +54,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        android:tint="@android:color/white"
         android:src="@android:drawable/ic_dialog_map"
+        android:tint="@android:color/white"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFFAFAFA"
-        android:layout_gravity="bottom|end"
-        android:gravity="right">
-
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:src="@drawable/powered_by_google_light"
-            android:gravity="end"
-            android:layout_gravity="center_vertical" />
-
-    </LinearLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>
