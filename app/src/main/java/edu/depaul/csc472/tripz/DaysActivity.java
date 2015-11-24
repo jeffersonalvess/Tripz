@@ -24,9 +24,7 @@ import com.google.android.gms.maps.model.LatLng;
 import edu.depaul.csc472.tripz.helper.City;
 import edu.depaul.csc472.tripz.helper.DatabaseHelper;
 
-public class DaysActivity extends AppCompatActivity implements DaysListFragment.Callbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks {
+public class DaysActivity extends AppCompatActivity implements DaysListFragment.Callbacks {
 
     public int _dayID = -1;
     public int _cityID = -1;
@@ -48,6 +46,10 @@ public class DaysActivity extends AppCompatActivity implements DaysListFragment.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        Intent intent2 = new Intent();
+        intent2.setClass(DaysActivity.this, Splashscreen.class);
+        startActivity(intent2);
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,8 +69,6 @@ public class DaysActivity extends AppCompatActivity implements DaysListFragment.
         _cityID = cityID;
         _tripID = tripID;
 
-        getCityBounds();
-
         DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
         final City c = databaseHelper.getCity(cityID);
 
@@ -82,6 +82,14 @@ public class DaysActivity extends AppCompatActivity implements DaysListFragment.
 
         //Fragment call << Need improvement to implement tablet compatibility>>
         ((DaysListFragment) getFragmentManager().findFragmentById(R.id.days_list)).setActivateOnItemClick(true);
+    }
+
+    @Override
+    protected void onActivityResult(int reqCode,
+                                    int resCode, Intent data) {
+        if(reqCode == 2){
+            _cityID = data.getIntExtra("CITYID", -1);
+        }
     }
 
     //This method is create to support Callbacks of DaysListFragment!!!
@@ -118,63 +126,5 @@ public class DaysActivity extends AppCompatActivity implements DaysListFragment.
         cityIntent.putExtra("TripID", _tripID);
         cityIntent.putExtra("CityName", _cityName);
         startActivity(cityIntent);
-    }
-
-    private void getCityBounds(){
-        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(AppIndex.API)
-                .addApi(Places.GEO_DATA_API)
-                .enableAutoManage(this, 5, this)
-                .addApi(LocationServices.API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-
-        DatabaseHelper d = new DatabaseHelper(getApplicationContext());
-
-        PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
-                .getPlaceById(mGoogleApiClient, d.getCity(_cityID).getId_maps());
-
-        d.closeDB();
-
-        placeResult.setResultCallback(callback);
-    }
-
-
-    private ResultCallback<PlaceBuffer> callback
-            = new ResultCallback<PlaceBuffer>() {
-        @Override
-        public void onResult(PlaceBuffer places) {
-            if (!places.getStatus().isSuccess()) {
-                Log.e(LOG_TAG, "Place query did not complete. Error: " +
-                        places.getStatus().toString());
-                return;
-            }
-            // Selecting the first object buffer.
-            CITY_BOUNDS = places.get(0).getLatLng();
-            Log.i(LOG_TAG, "Hierarchy");
-        }
-    };
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        Log.i(LOG_TAG, "Google Places API connected.");
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e(LOG_TAG, "Google Places API connection failed with error code: "
-                + connectionResult.getErrorCode());
-
-        Toast.makeText(this,
-                "Google Places API connection failed with error code:" +
-                        connectionResult.getErrorCode(),
-                Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.e(LOG_TAG, "Google Places API connection suspended.");
     }
 }

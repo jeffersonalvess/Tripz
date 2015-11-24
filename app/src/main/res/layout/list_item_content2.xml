@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="5dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginRight="10dp"
+        android:layout_weight="1">
 
         <TextView
             android:layout_width="wrap_content"
@@ -18,70 +20,35 @@
             android:singleLine="true"
             android:id="@+id/txtTitle" />
 
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <LinearLayout
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Small Text"
+            android:id="@+id/txtLine1"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Small Text"
-                android:id="@+id/txtLine1"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Small Text"
-                android:id="@+id/txtLine2"/>
-
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="0"
-            android:descendantFocusability="blocksDescendants">
-
-            <ImageButton
-                android:id="@+id/btMaps"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_weight="1"
-                android:src="@android:drawable/ic_dialog_map"
-                android:tint="#818181"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="5dp"/>
-
-            <ImageButton
-                android:id="@+id/btDirections"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_weight="1"
-                android:src="@android:drawable/ic_menu_compass"
-                android:tint="#818181"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="5dp"/>
-
-
-
-        </LinearLayout>
+            android:layout_marginRight="10dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Small Text"
+            android:id="@+id/txtLine2"/>
 
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btMaps"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_weight="0"
+        android:src="@mipmap/ic_navigation"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="5dp"
+        android:tint="@color/colorPrimaryDark"
+        android:background="@android:color/transparent"/>
 
 
 </LinearLayout>

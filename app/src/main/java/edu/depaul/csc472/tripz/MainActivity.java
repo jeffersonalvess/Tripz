@@ -36,8 +36,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 
-public class MainActivity extends AppCompatActivity implements TripListFragment.Callbacks,
-        GoogleApiClient.OnConnectionFailedListener{
+public class MainActivity extends AppCompatActivity implements TripListFragment.Callbacks{
 
     private static final String LOG_TAG = "MainActivity";
 
@@ -52,16 +51,25 @@ public class MainActivity extends AppCompatActivity implements TripListFragment.
     public static String actual_city;
     public static LatLng actual_location;
 
+
+    public static boolean gps_enabled = false;
+    public static boolean network_enabled = false;
+
     private TextView Line2;
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+
+        ((TextView) findViewById(R.id.txtLine2)).setText(actual_city);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        actual_location = null;
-
-        ((TextView) findViewById(R.id.txtLine2)).setText("");
+        ((TextView) findViewById(R.id.txtLine2)).setText(actual_city);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Tripz");
@@ -111,7 +119,6 @@ public class MainActivity extends AppCompatActivity implements TripListFragment.
         ((TripListFragment) getFragmentManager().findFragmentById(R.id.trips_list)).setActivateOnItemClick(true);
 
         // Get Actual Location and set the static variable actual_place
-        setActualLocation();
     }
 
     void saveProfileInformation(String name, String id) throws IOException {
@@ -163,58 +170,6 @@ public class MainActivity extends AppCompatActivity implements TripListFragment.
         Intent cityIntent = new Intent(MainActivity.this, CitiesActivity.class);
         cityIntent.putExtra("TripID", id);
         startActivity(cityIntent);
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e(LOG_TAG, "Google Places API connection failed with error code: "
-                + connectionResult.getErrorCode());
-
-        Toast.makeText(this,
-                "Google Places API connection failed with error code:" +
-                        connectionResult.getErrorCode(),
-                Toast.LENGTH_LONG).show();
-    }
-
-    void setActualLocation(){
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, GOOGLE_API_CLIENT_ID, this)
-                .addApi(Places.PLACE_DETECTION_API)
-                .build();
-
-        PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
-                .getCurrentPlace(mGoogleApiClient, null);
-
-        result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
-            @Override
-            public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
-                //Line2 = (TextView) findViewById(R.id.txtLine2);
-                String city = likelyPlaces.get(0).getPlace().getAddress().toString();
-
-                actual_location = likelyPlaces.get(0).getPlace().getLatLng();
-
-                int v1, v2;
-
-                for (v1 = 0; city.charAt(v1) != ','; v1++) ;
-                for (v2 = v1 + 1; city.charAt(v2) != ','; v2++) ;
-
-                String city2 = city.substring(v1 + 2, v2 + 4);
-
-                for (v1 = city.length() - 1; city.charAt(v1) != ','; v1--) ;
-
-                city2 = city2.concat(" - " + city.substring(v1 + 2));
-                likelyPlaces.release();
-
-                actual_city = city2;
-
-                //Line2.setText(actual_city);
-                ((TextView) findViewById(R.id.txtLine2)).setText(actual_city);
-
-//                Intent intent = new Intent();
-//                intent.setClass(MainActivity.this, GoogleMapsTest.class);
-//                startActivity(intent);
-            }
-        });
     }
 }
 

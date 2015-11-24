@@ -261,7 +261,6 @@ public class PlacesListFragment extends ListFragment {
                 viewHolder.line1 = (TextView) row.findViewById(R.id.txtLine1);
                 viewHolder.line2 = (TextView) row.findViewById(R.id.txtLine2);
                 viewHolder.bt1 = (ImageButton) row.findViewById(R.id.btMaps);
-                viewHolder.bt2 = (ImageButton) row.findViewById(R.id.btDirections);
                 row.setTag(viewHolder);
             }
             else
@@ -289,19 +288,6 @@ public class PlacesListFragment extends ListFragment {
                 }
             });
 
-            viewHolder.bt2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String dest = PLACES.get(position).getAddress().toString();
-                    dest.replace(" ", "+");
-
-                    Uri gmmIntentUri = Uri.parse("google.navigation:q=" + dest);
-                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                    mapIntent.setPackage("com.google.android.apps.maps");
-                    startActivity(mapIntent);
-                }
-            });
-
             //viewHolder.icon.setImageResource(R.mipmap.ic_place_white);
             viewHolder.title.setText(c.getName());
             viewHolder.line1.setText(c.getAddress());
@@ -317,7 +303,6 @@ public class PlacesListFragment extends ListFragment {
             TextView line1;
             TextView line2;
             ImageButton bt1;
-            ImageButton bt2;
         }
 
 
