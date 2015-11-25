@@ -44,8 +44,6 @@ public class WelcomeScreen extends AppCompatActivity {
     private ViewPager mViewPager;
     public static final String FACEBOOK_PREFS = "FacebookPreferences";
 
-    public static LocationManager lm;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +51,7 @@ public class WelcomeScreen extends AppCompatActivity {
 
         MainActivity.gps_enabled = false;
         MainActivity.network_enabled = false;
-        lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        MainActivity.lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
 
@@ -64,7 +62,8 @@ public class WelcomeScreen extends AppCompatActivity {
             intent.setClass(WelcomeScreen.this, Splashscreen.class);
             //intent.setClass(WelcomeScreen.this, GoogleMapsTest.class);
             intent.putExtra("REQ", 1);
-            startActivityForResult(intent, 1);
+            startActivity(intent);
+            finish();
         }
 
 
@@ -138,17 +137,6 @@ public class WelcomeScreen extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onActivityResult(int reqCode,
-                                    int resCode, Intent data) {
-        if(reqCode == 1){
-            Intent intent = new Intent();
-            intent.setClass(WelcomeScreen.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
-    }
-
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -186,7 +174,8 @@ public class WelcomeScreen extends AppCompatActivity {
                 editor.putBoolean("loginSucessful", true);
                 editor.commit();
 
-                Intent intent = new Intent(PlaceholderFragment.this.getActivity(), MainActivity.class);
+                Intent intent = new Intent(getActivity(), Splashscreen.class);
+                intent.putExtra("REQ", 1);
                 startActivity(intent);
                 getActivity().finish();
 

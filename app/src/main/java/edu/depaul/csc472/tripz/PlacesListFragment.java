@@ -272,6 +272,8 @@ public class PlacesListFragment extends ListFragment {
             viewHolder.bt1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Intent intent2 = new Intent();
+
                     //if(MainActivity.network_enabled && MainActivity.gps_enabled) {
                         String dest = "";
 

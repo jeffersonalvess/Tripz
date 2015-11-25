@@ -41,79 +41,91 @@ public class Splashscreen extends AppCompatActivity implements
         MainActivity.gps_enabled = verLocation();
         MainActivity.network_enabled = verNetwork();
 
-        if(MainActivity.gps_enabled) {
-            if(request == 1 && MainActivity.gps_enabled != loc) {
-                GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
-                        .enableAutoManage(this, 2, this)
-                        .addApi(Places.PLACE_DETECTION_API)
-                        .build();
+            if(request == 1) {
+                if (MainActivity.gps_enabled) {
+                    GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
+                            .enableAutoManage(this, 2, this)
+                            .addApi(Places.PLACE_DETECTION_API)
+                            .build();
 
-                PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
-                        .getCurrentPlace(mGoogleApiClient, null);
+                    PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
+                            .getCurrentPlace(mGoogleApiClient, null);
 
-                result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
-                    @Override
-                    public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
-                        //Line2 = (TextView) findViewById(R.id.txtLine2);
-                        String city = likelyPlaces.get(0).getPlace().getAddress().toString();
+                    result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
+                        @Override
+                        public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
+                            //Line2 = (TextView) findViewById(R.id.txtLine2);
+                            String city = likelyPlaces.get(0).getPlace().getAddress().toString();
 
-                        MainActivity.actual_location = likelyPlaces.get(0).getPlace().getLatLng();
+                            MainActivity.actual_location = likelyPlaces.get(0).getPlace().getLatLng();
 
-                        int v1, v2;
+                            int v1, v2;
 
-                        for (v1 = 0; city.charAt(v1) != ','; v1++) ;
-                        for (v2 = v1 + 1; city.charAt(v2) != ','; v2++) ;
+                            for (v1 = 0; city.charAt(v1) != ','; v1++) ;
+                            for (v2 = v1 + 1; city.charAt(v2) != ','; v2++) ;
 
-                        String city2 = city.substring(v1 + 2, v2 + 4);
+                            String city2 = city.substring(v1 + 2, v2 + 4);
 
-                        for (v1 = city.length() - 1; city.charAt(v1) != ','; v1--) ;
+                            for (v1 = city.length() - 1; city.charAt(v1) != ','; v1--) ;
 
-                        city2 = city2.concat(" - " + city.substring(v1 + 2));
-                        likelyPlaces.release();
+                            city2 = city2.concat(" - " + city.substring(v1 + 2));
+                            likelyPlaces.release();
 
-                        MainActivity.actual_city = city2;
+                            MainActivity.actual_city = city2;
 
-                        setResult(1);
-                        finish();
-                    }
-                });
+
+                            Intent intent2 = new Intent();
+                            intent2.setClass(Splashscreen.this, MainActivity.class);
+                            startActivity(intent2);
+                            finish();
+                        }
+                    });
+                }
+                else{
+                    Intent intent2 = new Intent();
+                    intent2.setClass(Splashscreen.this, MainActivity.class);
+                    startActivity(intent2);
+                    finish();
+                }
             }
             else if(request == 2 && _cityID > -1 && MainActivity.network_enabled == true) {
-                GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
-                        .addApi(AppIndex.API)
-                        .addApi(Places.GEO_DATA_API)
-                        .enableAutoManage(this, 5, this)
-                        .addApi(LocationServices.API)
-                        .addApi(Places.PLACE_DETECTION_API)
-                        .addConnectionCallbacks(this)
-                        .addOnConnectionFailedListener(this)
-                        .build();
 
-                DatabaseHelper d = new DatabaseHelper(getApplicationContext());
+                if (MainActivity.gps_enabled && MainActivity.network_enabled) {
+                    if(MainActivity.actual_location == null){
 
-                PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
-                        .getPlaceById(mGoogleApiClient, d.getCity(_cityID).getId_maps());
+                    }
+                    
+                    GoogleApiClient mGoogleApiClient2 = new GoogleApiClient.Builder(this)
+                            .addApi(AppIndex.API)
+                            .addApi(Places.GEO_DATA_API)
+                            .enableAutoManage(this, 5, this)
+                            .addApi(LocationServices.API)
+                            .addApi(Places.PLACE_DETECTION_API)
+                            .addConnectionCallbacks(this)
+                            .addOnConnectionFailedListener(this)
+                            .build();
 
-                d.closeDB();
+                    DatabaseHelper d = new DatabaseHelper(getApplicationContext());
 
-                placeResult.setResultCallback(callback);
+                    PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+                            .getPlaceById(mGoogleApiClient2, d.getCity(_cityID).getId_maps());
+
+                    d.closeDB();
+
+                    placeResult.setResultCallback(callback);
+                }
             }
             else{
                 setResult(0);
                 finish();
             }
-        }
-        else {
-            setResult(0);
-            finish();
-        }
     }
 
     public static boolean verLocation(){
         boolean ret = false;
 
         try {
-            ret = WelcomeScreen.lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            ret = MainActivity.lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
         } catch(Exception ex) {}
 
         return ret;
@@ -123,7 +135,7 @@ public class Splashscreen extends AppCompatActivity implements
         boolean ret = false;
 
         try {
-            ret = WelcomeScreen.lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            ret = MainActivity.lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
         } catch(Exception ex) {}
 
         return ret;

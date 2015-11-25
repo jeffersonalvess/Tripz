@@ -3,6 +3,7 @@ package edu.depaul.csc472.tripz;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements TripListFragment.
 
     public static boolean gps_enabled = false;
     public static boolean network_enabled = false;
+
+    public static LocationManager lm;
 
     private TextView Line2;
 
