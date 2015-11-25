@@ -94,7 +94,7 @@ public class Splashscreen extends AppCompatActivity implements
                     if(MainActivity.actual_location == null){
 
                     }
-                    
+
                     GoogleApiClient mGoogleApiClient2 = new GoogleApiClient.Builder(this)
                             .addApi(AppIndex.API)
                             .addApi(Places.GEO_DATA_API)
