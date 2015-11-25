@@ -46,10 +46,6 @@ public class DaysActivity extends AppCompatActivity implements DaysListFragment.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        Intent intent2 = new Intent();
-        intent2.setClass(DaysActivity.this, Splashscreen.class);
-        startActivity(intent2);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,6 +64,12 @@ public class DaysActivity extends AppCompatActivity implements DaysListFragment.
         int tripID = intent.getIntExtra("TripID", -1);
         _cityID = cityID;
         _tripID = tripID;
+
+        Intent intent2 = new Intent();
+        intent2.setClass(DaysActivity.this, Splashscreen.class);
+        intent2.putExtra("REQ", 2);
+        intent2.putExtra("CITYID", _cityID);
+        startActivity(intent2);
 
         DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
         final City c = databaseHelper.getCity(cityID);

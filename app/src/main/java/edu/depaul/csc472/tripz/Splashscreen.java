@@ -29,8 +29,11 @@ public class Splashscreen extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splashscreen);
+
 
         Intent intent = getIntent();
+        int request = intent.getIntExtra("REQ", -1);
         int _cityID = intent.getIntExtra("CITYID", -1);
 
         boolean loc = MainActivity.gps_enabled, net = MainActivity.network_enabled;
@@ -39,8 +42,7 @@ public class Splashscreen extends AppCompatActivity implements
         MainActivity.network_enabled = verNetwork();
 
         if(MainActivity.gps_enabled) {
-            if((MainActivity.gps_enabled != loc)) {
-                setContentView(R.layout.activity_splashscreen);
+            if(request == 1 && MainActivity.gps_enabled != loc) {
                 GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
                         .enableAutoManage(this, 2, this)
                         .addApi(Places.PLACE_DETECTION_API)
@@ -76,8 +78,7 @@ public class Splashscreen extends AppCompatActivity implements
                     }
                 });
             }
-
-            if(_cityID > -1 && MainActivity.network_enabled == true) {
+            else if(request == 2 && _cityID > -1 && MainActivity.network_enabled == true) {
                 GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
                         .addApi(AppIndex.API)
                         .addApi(Places.GEO_DATA_API)
@@ -96,6 +97,10 @@ public class Splashscreen extends AppCompatActivity implements
                 d.closeDB();
 
                 placeResult.setResultCallback(callback);
+            }
+            else{
+                setResult(0);
+                finish();
             }
         }
         else {

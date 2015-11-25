@@ -272,19 +272,21 @@ public class PlacesListFragment extends ListFragment {
             viewHolder.bt1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String dest = "";
+                    //if(MainActivity.network_enabled && MainActivity.gps_enabled) {
+                        String dest = "";
 
-                    dest = String.valueOf(MainActivity.actual_location.latitude)
-                            + "," + String.valueOf(MainActivity.actual_location.longitude) + "/";
+                        dest = String.valueOf(MainActivity.actual_location.latitude)
+                                + "," + String.valueOf(MainActivity.actual_location.longitude) + "/";
 
-                    dest += String.valueOf(PLACES.get(position).getAddress());
-                    dest = dest.replace(" ", "+");
+                        dest += String.valueOf(PLACES.get(position).getAddress());
+                        dest = dest.replace(" ", "+");
 
-                    Log.i("Maps ", "URL: " + "https://www.google.com/maps/dir/" + dest);
+                        Log.i("Maps ", "URL: " + "https://www.google.com/maps/dir/" + dest);
 
-                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                            Uri.parse("https://www.google.com/maps/dir/" + dest));
-                    startActivity(intent);
+                        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                                Uri.parse("https://www.google.com/maps/dir/" + dest));
+                        startActivity(intent);
+                    //}
                 }
             });
 

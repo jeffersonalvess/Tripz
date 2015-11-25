@@ -63,6 +63,7 @@ public class WelcomeScreen extends AppCompatActivity {
             Intent intent = new Intent();
             intent.setClass(WelcomeScreen.this, Splashscreen.class);
             //intent.setClass(WelcomeScreen.this, GoogleMapsTest.class);
+            intent.putExtra("REQ", 1);
             startActivityForResult(intent, 1);
         }
 
