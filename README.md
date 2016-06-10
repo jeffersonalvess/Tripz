@@ -30,7 +30,7 @@ Content
 
 Team
 -------------
-- [Jefferson Alves](https://www.linkedin.com/in/jeffersoanlvess)
+- [Jefferson Alves](https://www.linkedin.com/in/jeffersonalvess)
 - [Matheus Zamberlan](https://www.linkedin.com/in/matheus-zamberlan-19a8a7109)
 - [Miller Horvath](https://www.facebook.com/miller.horvath)
 
