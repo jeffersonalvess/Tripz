@@ -6,6 +6,7 @@
 Tripz is an Android app developed as DePaul University CSC 372 final project to help users to manage and organize trips. The app’s concept is based on the necessity that international students have to organize travels and know the country that they are visiting. Organizing a trip and make a good schedule is not an easy task. Based on that necessity, our team saw the opportunity to help not only students, but all kind of travelers in their trips.
 
 > **Features:**
+>
 > Tripz was built to run on Android Devices that runs the Android API 23 or higher. The main Tripz's features are:
 > -	Users can login with their Facebook account and have a profile in the app;
 > -	The app allows users to create new Trips, include new cities defining the range of days that they will stay on it (the app calculates automatically the number of days on each city), and insert places which they want to visit on each day of the trip;
